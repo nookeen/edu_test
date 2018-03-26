@@ -68,6 +68,12 @@ nav.visible {
             transition: height 0s, opacity 300ms ease-in-out;
 }
 
+.question-answers .answerOption {
+  padding: 10px;
+  border: 1px solid orange;
+  display: inline-block;
+}
+
 /* ____________________________ COMMON CLASSES ____________________________ */
 /* =============== */
 /* COMMON ELEMENTS */

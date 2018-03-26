@@ -58,6 +58,7 @@ var MODULE_DB = (function() {
   //console.p(data);
   
   //showMe();
+  _getTests();
   
   
   function showMe() {
@@ -167,25 +168,26 @@ var MODULE_DB = (function() {
   function _getTests() {
     
     var collection = db.tests.where('testId').equals(1);
-    collection.first(function(data) {
+    collection.first(function(entry) {
     
       //console.p(userName);
       //console.p(user);
       
-      //if(!entry)
-        //populateSomeData();
-      
+      if(!entry)
+        populateSomeData();
       
       db.tests.each(function (data) {
+        
         //console.p(JSON.stringify(data));
         
         // Save data into global var
         settings.tests = data;
         
-        // Forward to tests page
-        inc.RENDER.redirect('#tests');
-      
-        console.p(data);
+        // Forward to tests pagea
+        (window.location.hash !== '#tests') ? inc.RENDER.redirect('#tests') : inc.RENDER.renderTestPages();
+        
+        //console.p(data);
+        
       }).catch(function (e) {
         console.p(e, "error");
       });

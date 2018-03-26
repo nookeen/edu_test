@@ -41,7 +41,9 @@ var MODULE_UTILITIES = (function() {
       register: '.register_form',
       login: '.login_form',
       inputField: '.userNameClass'
-    }
+    },
+    // Used for page render
+    pageObjects: {}
   };
   
   // Cache the pages section

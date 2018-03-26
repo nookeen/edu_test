@@ -81,11 +81,31 @@ var MODULE_RENDERING = (function() {
       },
       
       '#tests': function() {
-        (isLoggedIn() === false) ? redirect('', true) : _renderStandardPage('.tests');
+        if(isLoggedIn() === false){
+          redirect('', true);
+          return;
+        }
+        
+        //console.p(settings.tests);
+        
+        if(!settings.tests)
+          _renderStandardPage('.tests');
+        else
+          renderTestPages();
       },
       
       '#questions': function() {
-        (isLoggedIn() === false) ? redirect('', true) : _renderStandardPage('.questions');
+        if(isLoggedIn() === false){
+          redirect('', true);
+          return;
+        }
+        
+        //console.p(settings.questions);
+        
+        if(!settings.tests)
+          _renderStandardPage('.questions');
+        else
+          renderTestPages();
       },
       
       '#single-question': function() {
@@ -115,7 +135,178 @@ var MODULE_RENDERING = (function() {
       //renderErrorPage();
     }
   }
+
+  function _renderSingleQuestionPage(className){
+    
+    
+    // Add event listeners to checkboxes and submit button
+    singleQestionPage.jObj.find('.fnSubmit').on('click', _processAnswer('submit'));
+    singleQestionPage.jObj.find('.answerOption').on('click', _processAnswer('select'));
+    
+    //$( "#book" ).toggle( "slow", function() {
+    //  // Animation complete.
+    //});
+  }
   
+  function renderTestPages(pageClassName){
+    
+    // Get the data
+    var data = settings.tests.data;
+    var pages = ['.tests', '.questions', '.singleQuestion'];
+    
+    // Construct pageObject for 3 pages
+    for (var page in pages)
+      _createPageObject(page);
+    
+    console.p(settings.pageObjects);
+    
+    var testsPage = settings.pageObjects;
+    // Remove any extra stuff
+    //testsPage.jUl.html('');
+    
+    console.p(testsPage);
+    
+    if(data.length){
+      data = _.sortBy (data, [ 'testSequence' ]);
+      
+      console.p(data);
+      
+      _buildTemplate();
+      
+      //console.p(_.find(data, { 'questionSequence': 50 }));
+      //_.sortBy(users, ['user', 'age']);
+      //console.p(_.sortBy(data, ['testSequence','questions.questionUniqueID','questions.answers.answerUniqueID']));
+      //console.p(_.sortBy(data, ['testSequence','questions.questionUniqueID','questions.answers.answerUniqueID']));
+    }
+    
+  }
+  function _createPageObject(pageClassName) {
+    
+    //settings.pageObjects
+    var pageObject = {};
+    //pageObject[pageClassName] = {};
+    
+    // For tests and questions views
+    pageObject.jObj = settings.jBody.find(pageClassName);
+    pageObject.jUl = pageObject.jObj.find('ul');
+    pageObject.jLi = pageObject.jObj.find('li');
+    
+    if(pageClassName === '.singleQuestion'){
+      // For singleQuestionPage
+      pageObject.jh2 = pageObject.jObj.find('h2');
+      pageObject.jAnswerTxt = pageObject.jObj.find('li .answerTxt');
+      pageObject.jAswerOption = pageObject.jObj.find('li .answerOption');
+      pageObject.jHint = pageObject.jObj.find('.hint');
+      pageObject.jAnswer = pageObject.jObj.find('.answer');
+      pageObject.jFnSubmit = pageObject.jObj.find('.fnSubmit');
+    }
+    
+    pageObject.template = {
+      content: '',
+      uniqueId: '',
+      jHtml: {}
+    };
+    
+    settings.pageObjects[pageClassName] = pageObject;
+  }
+  
+  function _buildTemplate(pageClassName) {
+    
+    var testsPage = settings.pageObjects[pageClassName];
+    
+    for (var key in data) {
+        
+        console.p(data[key]);
+        
+        if(pageClassName === '.tests'){
+          testsPage.template = {
+            content: data[key].testTitle,
+            uniqueId: data[key].testUniqueID,
+            jHtml: testsPage.jLi.clone()
+                                .attr('data-unique-id', data[key].testUniqueID)
+                                .html(data[key].testTitle)
+          };
+        }
+        //for (var key2 in data[key]) {
+          //console.p(_.find(data[key2], { 'questionSequence': 50 }));
+        //}
+        
+        // Render
+        testsPage.jUl.prepend(testsPage.template.jHtml);
+      }
+  }
+  
+  function _resolvedAnswersAmount(callback) {
+    
+    if(settings.appSession.currentUserAnswers) {
+      
+      var answeres = settings.appSession.currentUserAnswers;
+      
+      var calculations = {
+        'countSolvedTests' : function() {
+          return _countSolvedTests(answeres);
+        },
+        'countSolvedQuestions' : function() {
+          return _countSolvedQuestions(answeres);
+        }
+      };
+      
+      if (requests[callback]) {
+        requests[callback]();
+      } else {
+        console.p('Error: ' + callback); // If the keyword isn't listed in the above - show error
+      }
+    }
+  }
+  
+  function _countSolvedTests(answeres) {
+    /*
+      [
+        testUniqueID : kjhjkhj
+        testSolved : true
+        testInProgress : false
+        questions :
+        [
+          questionUniqueID : sdsds
+          questionSolved : true
+          questionInProgress : false
+        ],
+        [
+          questionUniqueID : sdsds
+          questionSolved : false
+          questionInProgress : true
+        ],
+        [
+          questionUniqueID : sdsds
+          questionSolved : false
+          questionInProgress : true
+        ],
+      ],
+      [
+        testUniqueID : kjhjkhj
+        testSolved : true
+        testInProgress : false
+        questions :
+        [
+          questionUniqueID : sdsds
+          questionSolved : true
+          questionInProgress : false
+        ],
+        [
+          questionUniqueID : sdsds
+          questionSolved : false
+          questionInProgress : true
+        ],
+      ]
+    */
+  }
+  
+  function _countSolvedQuestions(answeres) {
+    
+  }
+  
+  
+    
   function _renderStandardPage(requestedPage) {
     
     // 00000000
@@ -175,25 +366,11 @@ var MODULE_RENDERING = (function() {
     jNewPage.removeClass('offscreen classic2');
     jNewPage.addClass('classic');
     
+    //console.p('requestedPage:'+requestedPage);
+    
     // SAVE into session and settings
     //sessionStorage.setItem('currentPage', requestedPage);
     settings.appSession.currentPage = requestedPage;
-  }
-  
-  function _renderSingleQuestionPage(index){
-    
-    // Find the wanted product by iterating the data object and searching for the chosen index.
-    //if(data.length){
-    //  data.forEach(function (item) {
-    //    if(item.id == index){
-    //      
-    //      // Populate '.preview-large' with the chosen product's data.
-    //      container.find('h3').text(item.name);
-    //      container.find('img').attr('src', item.image.large);
-    //      container.find('p').text(item.description);
-    //    }
-    //  });
-    //}
   }
   
   function isLoggedIn() {
@@ -206,6 +383,7 @@ var MODULE_RENDERING = (function() {
   
   return {
     redirect: redirect,
-    isLoggedIn: isLoggedIn
+    isLoggedIn: isLoggedIn,
+    renderTestPages: renderTestPages
   };
 })();
