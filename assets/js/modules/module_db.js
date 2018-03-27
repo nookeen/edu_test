@@ -1,8 +1,6 @@
-//=============================================================================
-// MODULE_DB
-//=============================================================================
 var MODULE_DB = (function() {
-  
+"use strict";
+
   if (!('indexedDB' in window)) {
     alert('This browser doesn\'t support IndexedDB. Please use a modern browser.');
     return;
@@ -229,4 +227,4 @@ var MODULE_DB = (function() {
   return {
     dbRequests: dbRequests
   };
-})();
+})(this);

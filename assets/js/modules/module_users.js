@@ -120,4 +120,4 @@ var MODULE_USERS = (function() {
   }
   
   return {};
-})();
+})(this);

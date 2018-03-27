@@ -1,4 +1,4 @@
-var MODULE_UTILITIES = (function() {
+var CONFIG_MODULE = (function() {
 "use strict";
 
   // Put jQuery stuff into variables
@@ -48,53 +48,7 @@ var MODULE_UTILITIES = (function() {
   settings.pages.jPages = settings.jBody.find('.page');
   settings.jAlertBox = settings.jBody.find('.alertBox');
   
-  // DOM manipulations
-  var year = new Date().getFullYear();
-  settings.jBody.find('.txt-year').html(year);
-  
-  function getRandomInt() {
-    return Math.floor(Math.random() * Math.floor(1000000));
-  }
-  
-  function _hideAlertBox() {
-    settings.jAlertBox.slideUp(250);
-  }
-  
-  function showAlertBox(text, alertClass) {
-    
-    console.p(text);
-    console.p(alertClass);
-    
-    // Close any opened alerts
-    settings.jAlertBox.hide();
-    settings.jAlertBox.removeClass('[class$=success] [class$=warning] [class$=danger]');
-    
-    settings.jAlertBox.addClass('alert-'+alertClass); // success, warning, danger
-    settings.jAlertBox.find('span.content').html(text);
-    settings.jAlertBox.slideDown(500);
-    
-    // Events
-    settings.jAlertBox.find('.close').on('click', _hideAlertBox);
-  }
-  
-  
-  
-  
-  
-  function createUniqueID(number) {
-    var _1 = number,
-        _2 = getRandomInt(),
-        _3 = getRandomInt(),
-        hashids = settings.hashids;
-        
-    //console.p(_1);
-    //console.p(_2);
-    //console.p(hashids.encode(_1, _2, _3));
-    
-    return hashids.encode(_1, _2, _3);
-  }
   return {
-    showAlertBox: showAlertBox,
-    createUniqueID: createUniqueID
+    settings: settings
   };
 })(this);
