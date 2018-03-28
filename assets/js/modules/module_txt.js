@@ -1,7 +1,7 @@
 //=============================================================================
-// MODULE_TXT
+// TXT_MODULE
 //=============================================================================
-var MODULE_TXT = (function() {
+var TXT_MODULE = (function() {
   
   // Everything related to view in terms of content and text goes here
   var txt = {};

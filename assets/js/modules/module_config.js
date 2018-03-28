@@ -2,14 +2,15 @@ var CONFIG_MODULE = (function() {
 "use strict";
 
   // Put jQuery stuff into variables
-  var settings = {
+  var config = {
     // cache jQuery
     jWindow: $(window),
     jBody: $('body'),
     // sessionStorage setup
     appSession: {
       currentUser: sessionStorage.getItem('userName'), // Get user's name to see if there is a session
-      currentPage: null //sessionStorage.getItem('currentPage'), // Get user's name to see if there is a session
+      currentPage: null, //sessionStorage.getItem('currentPage'), // Get user's name to see if there is a session
+      dataLoaded: false
     },
     // Define page structure
     pages: {
@@ -21,10 +22,15 @@ var CONFIG_MODULE = (function() {
         questions: 'questions',
         singleQuestion: 'single-question'
       },
+      unprotected: ['', '#register'],
+      mainUnprotected: '',
+      mainProtected: 'tests',
+      protected_: ['tests', 'questions', 'singleQuestion'],
+      pageObjects: {},
+      built: false
     },
     // When creating unique IDs we'll need to set them apart by section
-    hashids: new Hashids('astronomyCourse'),
-    idHashNumber: {
+    sectionHashID: {
       tests: 1,
       questions: 2,
       answers: 3,
@@ -40,15 +46,18 @@ var CONFIG_MODULE = (function() {
       login: '.login_form',
       inputField: '.userNameClass'
     },
+    tests: {},
     // Used for page render
-    pageObjects: {}
+    pageObjects: {},
+    waitJS: {}
   };
   
   // Cache the pages section
-  settings.pages.jPages = settings.jBody.find('.page');
-  settings.jAlertBox = settings.jBody.find('.alertBox');
+  config.jAlertBox = config.jBody.find('.alertBox');
+  config.pages.jPages = config.jBody.find('.page');
+  config.jPreloader = config.jBody.find('.preloader');
   
   return {
-    settings: settings
+    config: config
   };
 })(this);

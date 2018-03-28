@@ -1,0 +1,235 @@
+<!doctype html>
+<html class="no-js" lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="text/x-ua-compatible" content="ie=edge">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <meta name="Description" content="Astronomy Course - Introduction" />
+  <meta name="Keywords" content="astronomy, astronomy course, custom made course" />
+  
+  <title>Astronomy Course - Introduction</title>
+  
+  <link href="favicon.ico" type="image/ico" rel="icon"/>
+  
+  <link rel="stylesheet" type="text/css" media="all" href="assets/css/lib/bootstrap.min.css" />
+  <link rel="stylesheet" type="text/css" media="all" href="assets/css/lib/bootstrap.icons.css" />
+  <link rel="stylesheet" type="text/css" media="all" href="assets/css/style.css" />
+  
+</head>
+
+<body>
+
+
+<div id="app">
+  
+  <div class="preloader" aria-hidden="true"><img src="assets/img/139.gif" alt="Image Preloader graphics" aria-hidden="true" /></div>
+  
+<button type="button" class="btn btn-default" aria-label="Left Align">
+  <span class="glyphicon glyphicon-align-left" aria-hidden="true"></span>
+</button>
+  
+  <!-- Fixed navbar -->
+  <nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+      </div>
+      <div id="navbar" class="navbar-collapse collapse">
+        <ul class="nav navbar-nav">
+          <li><a href="#">Home</a></li>
+          <li><a href="javascript:void(0);" class="logout">Logout</a></li>
+        </ul>
+      </div><!--/.nav-collapse -->
+    </div>
+  </nav>
+  
+  <div class="alertBox alert alert-dismissible" role="alert" style="display: none;">
+    <button type="button" class="close" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <span class="content"></span>
+  </div>
+  
+  <header class="padding50">
+    <div class="container">
+      <h1 class="center">Astronomy Course</h1>
+      <h2 class="center">Lesson 1</h2>
+    </div>
+  </header>
+  
+  <div class="padding20"></div>
+  
+  <div class="login page offscreen">
+    <div class="container">
+      <div role="form" lang="en-EN" dir="ltr">
+        
+        <div class="screen-reader-response"></div>
+        
+        <form action="#" method="post" class="login_form" novalidate="novalidate">
+          <div class="row">
+            <div class="offset-lg-3 offset-sm-3 col-sm-5 no-side-padding">
+              <div class="tnp-field tnp-field-firstname">
+                <label for="userName" class="offscreen">Name</label>
+                <input type="text" id="userName" name="userName" value="" placeholder="Your Name" size="40" class="form-control userNameClass" aria-required="true" aria-invalid="false" />
+              </div>
+            </div>
+            
+            <div class="col-xs-4 col-sm-4 no-side-padding">
+              <input class="btn md green submit-btn" type="submit" value="Login">
+            </div>
+          </div>
+          
+          <br><br>
+          
+          <div class="center">
+            <p class="sub-text">Do not have an account?</p>
+            <a href="#register" class="btn sm brown router-btn">Register</a>
+          </div>
+          
+        </form>
+      </div>
+      
+    </div>
+  </div>
+  
+  <div class="register page offscreen">
+    <div class="container">
+      <div role="form" lang="en-EN" dir="ltr">
+        
+        <div class="screen-reader-response"></div>
+        
+        <form action="#register" method="post" class="register_form" novalidate="novalidate">
+          <div class="row">
+            <div class="offset-lg-3 offset-sm-3 col-sm-5 no-side-padding">
+              <div class="tnp-field tnp-field-firstname">
+                <label for="registerUserName" class="offscreen">Name</label>
+                <input type="text" id="registerUserName" name="registerUserName" value="" placeholder="Your Name" size="40" class="form-control userNameClass" aria-required="true" aria-invalid="false" />
+              </div>
+            </div>
+            
+            <div class="col-xs-4 col-sm-4 no-side-padding">
+              <input class="btn md green submit-btn" type="submit" value="Register">
+            </div>
+          </div>
+          
+          <br><br>
+          
+          <div class="center">
+            <p class="sub-text">Already have an account?</p>
+            <a href="#" class="btn sm brown router-btn">Login</a>
+          </div>
+          
+        </form>
+      </div>
+    </div>
+  </div>
+  
+  <!--This is our template. -->
+  <!--Data will be inserted in its according place, replacing the brackets.-->
+  <script id="test-list" type="text/x-handlebars-template">
+      <ul class="test-list list">
+        {{#each tests}}
+        
+        <li data-unique-id="{{testUniqueID}}" class="locked testListItem">
+          <span class="glyphicon glyphicon-chevron-right arrow" aria-hidden="true"></span>
+          
+          <span class="status {{statusClassName}}" aria-hidden="true"></span>
+          
+          <a href="#questions/{{testUniqueID}}">{{testTitle}}</a>
+        </li>
+        
+        {{/each}}
+      </ul>
+  </script>
+  
+  <div class="tests page offscreen">
+    <div class="container">
+      <h2 class="center">Tests to Complete</h2>
+      
+      <!--Your new content will be displayed in here-->
+      <div class="content-tests"></div>
+    </div>
+  </div>
+  
+  <script id="question-list" type="text/x-handlebars-template">
+      <ul class="question-list list">
+        {{#each questions}}
+          
+        <li data-unique-id="{{questionUniqueID}}" data-test-id="{{testUniqueID}}" class="locked questionListItem">
+          <span class="glyphicon glyphicon-chevron-right arrow"></span>
+          
+          <span class="status {{statusClassName}}" aria-hidden="true"></span>
+          
+          <a href="#single-question/{{testUniqueID}}/{{questionUniqueID}}">{{questionTitle}}</a>
+        </li>
+          
+        {{/each}}
+      </ul>
+  </script>
+  
+  <div class="questions page offscreen">
+    <div class="container">
+      <h2 class="center">List of Questions</h2>
+      
+      <!--Your new content will be displayed in here-->
+      <div class="content-questions"></div>
+    </div>
+  </div>
+  
+  <div class="singleQuestion page offscreen">
+    <div class="quesionHolder" data-question-number="" data-question-unique-id="">
+      <h2></h2>
+      <ul class="question-answers">
+        <li data-answer-unique-id="">
+          <span class="answerTest"></span>
+          <span data-answer-unique-id="" class="answerOption glyphicon glyphicon-ok"></span>
+        </li>
+      </ul>
+      
+      <p class="hint"></p>
+      <p class="answer"></p>
+      
+      <button class="btn sm green fnSubmit">Submit</button>
+    </div>
+  </div>
+</div>
+  <footer class="container padding20">
+    <div class="col-xl-10 offset-xl-1">
+      <p><strong>&copy; Copyright <span class="txt-year" aria-label="Current year"></span></stong></p>
+      <p>All original graphics and text contents presented on this website are the intellectual property and cannot be copied, duplicated, printed or utilized by anyone without the written permission from the owner unless otherwise noted. All other trademarks and copyrights are the property of their respective owners.</p>
+      <div class="padding30"></div>
+    </div>
+  </footer>
+</div><!-- //app -->
+
+<script src="assets/js/lib/load-min.js"></script>
+<script src="assets/js/main.js"></script>
+
+<!--<script src="assets/js/lib/dexie.js"></script>
+<script src="assets/js/lib/jquery-3.1.1.min.js"></script>
+<script src="assets/js/lib/bootstrap.min.js"></script>
+<script src="assets/js/lib/hashids.min.js"></script>
+<script src="assets/js/lib/underscore-min.js"></script>
+
+<script src="assets/js/content.js"></script>
+-->
+
+<!-- <script src="assets/js/app.v9.js"></script> -->
+
+<!--<script src="assets/js/modules/module_txt.js"></script>
+<script src="assets/js/modules/module_utilities.js"></script>
+<script src="assets/js/modules/module_debug.js"></script>
+<script src="assets/js/modules/module_rendering.v2.js"></script>
+<script src="assets/js/modules/module_db.js"></script>
+<script src="assets/js/modules/module_users.js"></script>
+-->
+
+</body>
+</html>

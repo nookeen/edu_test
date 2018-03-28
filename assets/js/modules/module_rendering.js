@@ -1,13 +1,13 @@
-var MODULE_RENDERING = (function() {
+var RENDERING_MODULE = (function() {
 "use strict";
 
   // Include Modules
   var inc = {};
   
-  inc.TXT = MODULE_TXT;
-  inc.UTIL = MODULE_UTILITIES;
+  inc.TXT = TXT_MODULE;
+  inc.UTIL = UTILITIES_MODULE;
   
-  var settings = inc.UTIL.settings,
+  var config = inc.CONFIG.config,
       pages = {};
   
   _render();
@@ -17,12 +17,12 @@ var MODULE_RENDERING = (function() {
   // This is how the navigation of our app happens.
   
   //function _addHashEventListener() {
-  //    settings.jWindow.on('hashchange', function() {
+  //    config.jWindow.on('hashchange', function() {
   //    _render( decodeURI( window.location.hash ) );
   //  });
   //}_addHashEventListener();
   
-  settings.jWindow.on('hashchange', _addHashEventListener);
+  config.jWindow.on('hashchange', _addHashEventListener);
   
   //var counter = 0;
   
@@ -85,9 +85,9 @@ var MODULE_RENDERING = (function() {
           return;
         }
         
-        //console.p(settings.tests);
+        //console.p(config.tests);
         
-        if(!settings.tests)
+        if(!config.tests)
           _renderStandardPage('.tests');
         else
           renderTestPages();
@@ -99,9 +99,9 @@ var MODULE_RENDERING = (function() {
           return;
         }
         
-        //console.p(settings.questions);
+        //console.p(config.questions);
         
-        if(!settings.tests)
+        if(!config.tests)
           _renderStandardPage('.questions');
         else
           renderTestPages();
@@ -150,7 +150,7 @@ var MODULE_RENDERING = (function() {
   function renderTestPages(){
     
     // Get the data
-    var data = settings.tests.data;
+    var data = config.tests.data;
     var pages = ['.tests', '.questions', '.singleQuestion'];
     
     // Construct pageObject for 3 pages
@@ -166,12 +166,12 @@ var MODULE_RENDERING = (function() {
   }
   function _createPageObject(pageClass) {
     
-    //settings.pageObjects
+    //config.pageObjects
     var pageObject = {};
     //pageObject[pageClass] = {};
     
     // For tests and questions views
-    pageObject.jObj = settings.jBody.find(pageClass);
+    pageObject.jObj = config.jBody.find(pageClass);
     pageObject.jUl = pageObject.jObj.find('ul');
     pageObject.jLi = pageObject.jObj.find('li');
     
@@ -195,14 +195,14 @@ var MODULE_RENDERING = (function() {
       jHtml: {}
     };
     
-    settings.pageObjects[pageClass] = pageObject;
+    config.pageObjects[pageClass] = pageObject;
   }
   
   function _buildTemplate(pageClass) {
     
     // Get the data
-    var data = settings.tests.data;
-    var testsPage = settings.pageObjects[pageClass];
+    var data = config.tests.data;
+    var testsPage = config.pageObjects[pageClass];
     
     // Remove any li content
     testsPage.jUl.html('');
@@ -269,9 +269,9 @@ var MODULE_RENDERING = (function() {
   
   function _resolvedAnswersAmount(callback) {
     
-    if(settings.appSession.currentUserAnswers) {
+    if(config.appSession.currentUserAnswers) {
       
-      var answeres = settings.appSession.currentUserAnswers;
+      var answeres = config.appSession.currentUserAnswers;
       
       var calculations = {
         'countSolvedTests' : function() {
@@ -346,7 +346,7 @@ var MODULE_RENDERING = (function() {
     // This is the previous page which we are hiding
     var previousPage = {};
     var myVar;
-    previousPage.name = settings.appSession.currentPage;
+    previousPage.name = config.appSession.currentPage;
     
     //console.p('Previous page: ' + previousPage.name);
     //console.p(requestedPage);
@@ -364,7 +364,7 @@ var MODULE_RENDERING = (function() {
       return true;
     }
     
-    previousPage.jObj = settings.pages.jPages.siblings(previousPage.name);
+    previousPage.jObj = config.pages.jPages.siblings(previousPage.name);
     
     // Fisrt bring the opacity down, move from right to left, then move it to middle of nowhere
     if(previousPage.jObj.css('opacity') > 0)
@@ -388,7 +388,7 @@ var MODULE_RENDERING = (function() {
   function _renderRequestedPage(requestedPage) {
     
     // This is the new page which we are showing
-    var jNewPage = settings.pages.jPages.siblings(requestedPage);
+    var jNewPage = config.pages.jPages.siblings(requestedPage);
     
     // 00000000
     // remove aria tags that it is hidden, move it into view
@@ -399,13 +399,13 @@ var MODULE_RENDERING = (function() {
     
     //console.p('requestedPage:'+requestedPage);
     
-    // SAVE into session and settings
+    // SAVE into session and config
     //sessionStorage.setItem('currentPage', requestedPage);
-    settings.appSession.currentPage = requestedPage;
+    config.appSession.currentPage = requestedPage;
   }
   
   function isLoggedIn() {
-    if(settings.appSession.currentUser) {
+    if(config.appSession.currentUser) {
       return true;
     } else {
       return false;

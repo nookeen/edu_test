@@ -1,49 +1,50 @@
-var MODULE_USERS = (function() {
+var USERS_MODULE = (function() {
 "use strict";
   
   // Import Modules
   var inc = {};
   
-  inc.UTIL = MODULE_UTILITIES;
-  inc.DB = MODULE_DB;
-  inc.TXT = MODULE_TXT;
-  inc.RENDER = MODULE_RENDERING;
+  inc.UTIL = UTILITIES_MODULE;
+  inc.DB = DB_MODULE;
+  inc.TXT = TXT_MODULE;
+  inc.RENDER = RENDERING_MODULE;
+  inc.CONFIG = CONFIG_MODULE;
   
-  var settings = inc.UTIL.settings,
+  var config = inc.CONFIG.config,
       submittedData = {},
       userData = {},
       forms = {},
       temp;
   
   // Setup form object for forms
-  for (var key in settings.forms) {
+  for (var key in config.forms) {
     
-    temp = settings.jBody.find(settings.formClassNames[key]);
+    temp = config.jBody.find(config.formClassNames[key]);
     forms[key] = {
       from: key,
-      formClass: settings.formClassNames[key],
+      formClass: config.formClassNames[key],
       jObj: temp,
       fields: {
-        jUserName: temp.find(settings.formClassNames.inputField) // Get form field as jQuery object
+        jUserName: temp.find(config.formClassNames.inputField) // Get form field as jQuery object
       }
       
     };
   }
   
-  // Check if logged in and add needed event listeners
-  // Add event listener
+  var disableNav = function(){
+    clearTimeout(delay);
+    var delay = setTimeout(function(){config.jBody.find('nav').addClass('disabled');}, 2000);
+  };
+  
+  // Do isLoggedIn add set event listeners
   forms.login.jObj.on('submit', _login);
   forms.register.jObj.on('submit', _register);
+  // Add event listener to logout
+  config.jBody.find('.logout').on('click', _logout);
   
-  // If user is already logged in go to the tests
-  if(inc.RENDER.isLoggedIn() === true) {
-    // Add event listener to logout
-    settings.jBody.find('.logout').on('click', _logout);
-    settings.jBody.find('nav').addClass('visible');
-  } else {
-    // Hide nav
-    settings.jBody.find('nav').removeClass('visible');
-  }
+  // Show/hide the nav bar
+  (inc.RENDER.isLoggedIn() === true) ? config.jBody.find('nav').addClass('visible').removeClass('disabled') :
+    config.jBody.find('nav').removeClass('visible', disableNav()); // Hide nav
   
   
   function _login(e) {
@@ -55,7 +56,7 @@ var MODULE_USERS = (function() {
     
     //console.p(submittedData);
     
-    if (_validateUserName(submittedData.userName, settings.formClassNames.login) === false)
+    if (_validateUserName(submittedData.userName, config.formClassNames.login) === false)
       return;
     
     // Get user from DB by userName
@@ -70,11 +71,11 @@ var MODULE_USERS = (function() {
     submittedData.userName = forms.register.fields.jUserName.val();
     
     // Validate the input
-    if (_validateUserName(submittedData.userName, settings.formClassNames.register) === false)
+    if (_validateUserName(submittedData.userName, config.formClassNames.register) === false)
       return;
     
     userData = {
-      userUniqueID: inc.UTIL.createUniqueID(settings.idHashNumber.users),
+      userUniqueID: inc.UTIL.createUniqueID(config.sectionHashID.users),
       userName: submittedData.userName,
       userAnswers: {}
     };
@@ -85,17 +86,19 @@ var MODULE_USERS = (function() {
   
   function _logout(e) {
     sessionStorage.removeItem('userName');
-    settings.appSession.currentUser = '';
+    config.appSession.currentUser = '';
+    
+    console.p('dsd');
     
     // Clear login and register fields
-    _resetForm(settings.forms.login);
-    _resetForm(settings.forms.register);
+    _resetForm(config.forms.login);
+    _resetForm(config.forms.register);
     
     // Hide nav
-    settings.jBody.find('nav').removeClass('visible');
+    config.jBody.find('nav').removeClass('visible');
     $('.navbar-collapse').collapse('hide');
     
-    inc.RENDER.redirect('#');
+    inc.RENDER.route('');
   }
   
   function _resetForm(form) {
