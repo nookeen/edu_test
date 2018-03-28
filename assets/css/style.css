@@ -144,12 +144,27 @@ nav.disabled {display: none;}
   top: 48%;
 }
 
+a.btn {
+  color: #ddd;
+}
+
+.btn-warning:visited,
+.btn-warning {
+  background-color: #94837b;
+  border-color: #94837b;
+}
+.btn-warning:active,
+.btn-warning:hover {
+  background-color: #a7948b;
+  border-color: #a7948b;
+}
+
 .list li {
   padding: 0 30px;
-  background-color: rgba(200,200,200,0.8);
+  background-color: rgba(220,220,220,0.85);
   margin-top: 10px; 
 }
-.list li:hover {background-color: rgba(200,200,200,1);}
+.list li:hover {background-color: rgba(230,230,230,1);}
 
 
 .list li,

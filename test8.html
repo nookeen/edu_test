@@ -74,15 +74,19 @@
         
         <form action="#" method="post" class="login_form" novalidate="novalidate">
           <div class="row">
-            <div class="offset-lg-3 offset-sm-3 col-sm-5 no-side-padding">
+            <div class="col-lg-offset-3 col-sm-offset-3 col-sm-5 no-side-padding">
               <div class="tnp-field tnp-field-firstname">
-                <label for="userName" class="offscreen">Name</label>
-                <input type="text" id="userName" name="userName" value="" placeholder="Your Name" size="40" class="form-control userNameClass" aria-required="true" aria-invalid="false" />
+                
+                <div class="input-group input-group-lg">
+                  <label for="userName" class="offscreen sr-only">Name</label>
+                  <input type="text" id="userName" name="userName" value="" placeholder="Your Name" size="40" class="form-control userNameClass" aria-required="true" aria-invalid="false" aria-describedby="sizing-addon1" />
+                </div>
+                
               </div>
             </div>
             
             <div class="col-xs-4 col-sm-4 no-side-padding">
-              <input class="btn md green submit-btn" type="submit" value="Login">
+              <input class="btn btn-lg btn-success submit-btn" type="submit" value="Login">
             </div>
           </div>
           
@@ -90,7 +94,7 @@
           
           <div class="center">
             <p class="sub-text">Do not have an account?</p>
-            <a href="#register" class="btn sm brown router-btn">Register</a>
+            <a href="#register" class="btn btn-warning" aria-label="Button to proceed to registration">Register</a>
           </div>
           
         </form>
@@ -107,15 +111,19 @@
         
         <form action="#register" method="post" class="register_form" novalidate="novalidate">
           <div class="row">
-            <div class="offset-lg-3 offset-sm-3 col-sm-5 no-side-padding">
+            
+            <div class="col-lg-offset-3 col-sm-offset-3 col-sm-5 no-side-padding">
               <div class="tnp-field tnp-field-firstname">
-                <label for="registerUserName" class="offscreen">Name</label>
-                <input type="text" id="registerUserName" name="registerUserName" value="" placeholder="Your Name" size="40" class="form-control userNameClass" aria-required="true" aria-invalid="false" />
+                <div class="input-group input-group-lg">
+                  <label for="registerUserName" class="offscreen sr-only">Name</label>
+                  <input type="text" id="registerUserName" name="registerUserName" value="" placeholder="Your Name" size="40" class="form-control userNameClass" aria-required="true" aria-invalid="false" />
+                </div>
+                
               </div>
             </div>
             
             <div class="col-xs-4 col-sm-4 no-side-padding">
-              <input class="btn md green submit-btn" type="submit" value="Register">
+              <input class="btn btn-lg btn-info submit-btn" type="submit" value="Register">
             </div>
           </div>
           
@@ -123,7 +131,7 @@
           
           <div class="center">
             <p class="sub-text">Already have an account?</p>
-            <a href="#" class="btn sm brown router-btn">Login</a>
+            <a href="#" class="btn btn-warning router-btn">Login</a>
           </div>
           
         </form>
@@ -133,8 +141,8 @@
   
   <!--This is our template. -->
   <!--Data will be inserted in its according place, replacing the brackets.-->
-  <script id="test-list" type="text/x-handlebars-template">
-      <ul class="test-list list">
+  <script id="tests-list" type="text/x-handlebars-template">
+      <ul class="tests-list list">
         {{#each tests}}
         
         <li data-unique-id="{{testUniqueID}}" class="locked testListItem">
@@ -158,8 +166,8 @@
     </div>
   </div>
   
-  <script id="question-list" type="text/x-handlebars-template">
-      <ul class="question-list list">
+  <script id="questions-list" type="text/x-handlebars-template">
+      <ul class="questions-list list">
         {{#each questions}}
           
         <li data-unique-id="{{questionUniqueID}}" data-test-id="{{testUniqueID}}" class="locked questionListItem">
@@ -183,23 +191,41 @@
     </div>
   </div>
   
+  
+  
+  
   <div class="singleQuestion page offscreen">
-    <div class="quesionHolder" data-question-number="" data-question-unique-id="">
-      <h2></h2>
-      <ul class="question-answers">
-        <li data-answer-unique-id="">
-          <span class="answerTest"></span>
-          <span data-answer-unique-id="" class="answerOption glyphicon glyphicon-ok"></span>
-        </li>
+    <div id="{{uniqueID}}" class="portfolio_nav">
+      <ul class="stars">
+        <li class="btn_overview"><a href="javascript:void(0);">Overview</a></li>
+        <li class="btn_arrow_l disabled"><a href="javascript:void(0);">Back</a></li>
+        <li class="btn_arrow_r"><a href="javascript:void(0);">Next</a></li>
       </ul>
-      
-      <p class="hint"></p>
-      <p class="answer"></p>
-      
-      <button class="btn sm green fnSubmit">Submit</button>
+      <div id="slider_{{uniqueID}}" class="slider2">
+        <ul>
+          
+          <div class="quesionHolder" data-question-number="" data-question-unique-id="">
+            <h2></h2>
+            <ul class="question-answers">
+              <li data-answer-unique-id="">
+                <span class="answerTest"></span>
+                <span data-answer-unique-id="" class="answerOption glyphicon glyphicon-ok"></span>
+              </li>
+            </ul>
+            
+            <p class="hint"></p>
+            
+            <p class="answer"></p>
+            
+            <button class="btn sm green fnSubmit">Submit</button>
+          </div>
+          
+        </ul>
+      </div>
     </div>
   </div>
 </div>
+  
   <footer class="container padding20">
     <div class="col-xl-10 offset-xl-1">
       <p><strong>&copy; Copyright <span class="txt-year" aria-label="Current year"></span></stong></p>

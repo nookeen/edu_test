@@ -110,7 +110,7 @@ var RENDERING_MODULE = (function() {
         
         console.p(index);
         
-        _switchPageTo('questions');
+        _switchPageTo('questions', index);
       },
       
       '#single-question': function() {
@@ -122,7 +122,7 @@ var RENDERING_MODULE = (function() {
         
         console.p(index);
         
-        _switchPageTo('singleQuestion');
+        _switchPageTo('singleQuestion', index);
       }
     };
     
@@ -138,7 +138,7 @@ var RENDERING_MODULE = (function() {
     }
   }
   
-  function _switchPageTo(nextPage) {
+  function _switchPageTo(nextPage, index) {
     
     //console.p('_hidePreviousPage');
     
@@ -161,7 +161,7 @@ var RENDERING_MODULE = (function() {
       //console.p(previousPage.name);
       //console.p(nextPage);
       
-      _showNextPage(nextPage);
+      _showNextPage(nextPage, index);
       
       return true;
     }
@@ -177,16 +177,16 @@ var RENDERING_MODULE = (function() {
     // CSS is set to 500ms, so before pushing the nextPage, we wan to wait until this one is gone
     setTimeout(function() {
       previousPage.jObj.addClass('offscreen').removeClass('offset-page');
-      _showNextPage(nextPage);
+      _showNextPage(nextPage, index);
       //window.waitJS.session_hide = true;
       return true;
     }, 550);
   }
   
   
-  function _showNextPage(nextPage) {
+  function _showNextPage(nextPage, index) {
     
-    _renderTestPages();
+    _renderTestPages(nextPage, index);
     
     //console.p('_showNextPages');
     
@@ -210,34 +210,35 @@ var RENDERING_MODULE = (function() {
   }
   
   
-  function _renderTestPages(){
+  function _renderTestPages(nextPage, index){
     
     console.p('@_renderTestPages');
     
-    if(config.pages.built === true)
-      return;
+    if(config.pages.built[nextPage] === true)
+      return; // Get it from DOM
     
     if (_.isEmpty( config.tests )) {
       return console.p('@No data, man.');
     }
     
+    var context = {};
+    
     console.p('@Found data in memory, getting the data.');
     
-    var contextTests = {
-      tests : config.tests.tests
-    };
-    var contextQuestions = {
-      questions : _.find(contextTests.tests, { 'testUniqueID': 'kyc310JUZEzV' })
-    };
+    console.p(index + ' is index');
+    console.p(nextPage + ' is nextPage');
+    console.p(config.tests.questions);
     
+    if(nextPage === 'tests')
+      context.tests = config.tests.tests;
     
-    console.p(contextTests);
-    console.p(contextQuestions);
+    if(nextPage === 'question')
+      context = _.find(config.tests, { 'testUniqueID': index });
     
-    var context = {
-      tests: contextTests,
-      questions: contextQuestions.questions,
-    };
+    console.p(context);
+    
+    if(nextPage === 'single-question')
+      context = _.find(config.tests.tests, { 'testUniqueID': index } , { 'questionUniqueID': index });
     
     //var context = {
     //people: [ 
@@ -249,39 +250,22 @@ var RENDERING_MODULE = (function() {
     //]
     //};
     
-    _template(context);
-    
-    return;
+    return _template(context, nextPage);
   }
   
-  function _template(context) {
+  function _template(context, nextPage) {
     
     // Grab the template script
-    var theTemplateScriptsForTests = $("#test-list").html();
-    var theTemplateScriptsForQuestions = $("#question-list").html();
+    var theTemplateScripts = $("#" + nextPage + "-list").html();
+    
+    //console.p(theTemplateScripts);
     
     // Compile the template
-    var theTemplateForTests = Handlebars.compile(theTemplateScriptsForTests);
-    var theTemplateForQuestions = Handlebars.compile(theTemplateScriptsForQuestions);
-    
-    // Define our data object
-    //var context = {
-    //  people: [ 
-    //    { firstName: 'Homer', lastName: 'Simpson' },
-    //    { firstName: 'Peter', lastName: 'Griffin' },
-    //    { firstName: 'Eric', lastName: 'Cartman' },
-    //    { firstName: 'Kenny', lastName: 'McCormick' },
-    //    { firstName: 'Bart', lastName: 'Simpson' }
-    //  ]
-    //};
-    
-    // Pass our data to the template
-    var theCompiledHtmlForTests = theTemplateForTests(context.tests);
-    var theCompiledHtmlForQuestions = theTemplateForQuestions(context.questions);
+    var theTemplate = Handlebars.compile(theTemplateScripts);
+    var theCompiledHtml = theTemplate(context);
     
     // Add the compiled html to the page
-    $('.content-tests').html(theCompiledHtmlForTests);
-    $('.content-questions').html(theCompiledHtmlForQuestions);
+    $('.content-' + nextPage).html(theCompiledHtml);
   }
   
   
