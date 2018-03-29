@@ -22,12 +22,12 @@ var RENDERING_MODULE = (function() {
     
     if(typeof DB_MODULE !== "undefined") {
       
-      //console.p(DB_MODULE);
-      //console.p('IM IN BOYS');
+      console.p(DB_MODULE);
+      console.p('IM IN BOYS');
       
       (DB_MODULE.isDataLoaded() === true) ? loaded = true : null;
       
-      //console.p('Yahooo! Cuz it\'s ' + loaded);
+      console.p('Yahooo! Cuz it\'s ' + loaded);
       
       return loaded;
     }
@@ -73,193 +73,202 @@ var RENDERING_MODULE = (function() {
   
   function _render(url) {
     
-    console.p('@Entering _render(' + url +')');
+    console.p('@_render(url) = ' + url);
     
-    if (_.isEmpty( config.tests )) {
-      return console.p('@No data, man. Stop!');
-    }
-    var context = {};
-    
-    console.p('@Data is available in config.tests');
-    
-    var nextPageId = url.split('/')[0];
-    var nextPageClass = nextPageId.replace('#','.');
-    var nextPageName = nextPageId.replace('#','');
-    
-    console.p('@Set nextPageId=' + nextPageId + ' from the url: ' + url);
-      console.p('@Set nextPageClass=' + nextPageClass);
-        console.p('@Set nextPageName=' + nextPageName);
-    
-    var index = false;
-    
-    // Handlbars' object structure
-    //var context = {
-    //  tests: [ 
-    //    { uiD: 'SJHDHF', blabla: 'blabla' },
-    //    { uiD: 'SJHDHF', blabla: 'blabla' },
-    //    { uiD: 'SJHDHF', blabla: 'blabla' },
-    //  ]
-    //};
-    
-    var map = {
+    // Get the keyword from the url.
+    var temp = url.split('/')[0],
+        index,
+        map = {
         
       // Main
       '': function() {
-        
         console.p('@home');
+        
+        _switchPageTo('login');
       },
       
       '#register': function() {
         
         console.p('@register');
+        
+        _switchPageTo('register');
       },
       
       '#tests': function() {
         
-        context.tests = config.tests.tests;
+        console.p('@tests');
         
-        console.p('#tests: set context={} for _Template()');
-          console.p('context=');
-            console.p(context);
-        
-        _Template(context, nextPageId, nextPageClass);
+        _switchPageTo('tests');
       },
       
       '#questions': function() {
         
+        console.p('@questions');
+        
+        // Get the index of which question we want to show and call the appropriate function
         index = url.split('#questions/')[1].trim();
         
-        var x = _.filter(config.tests.questions, { 'testUniqueID': index });
+        console.p(index);
         
-        console.p('@Find all questions for the testUniqueID' + index);
-        //context.questions = [x];
-        console.p(x);
-        
-        context.questions = x;
-        
-        console.p('#questions: set context={} for _Template()');
-          console.p('index=' + index);
-            console.p('context=');
-              console.p(context);
-        
-        _Template(context, nextPageId, nextPageClass);
+        _switchPageTo('questions', index);
       },
       
       '#single-question': function() {
         
+        console.p('@single-question-page');
+        
+        // Get the index of which question we want to show and call the appropriate function
         index = url.split('#single-question/')[1].trim();
         
-        context.singleQuestion = _.find(config.tests.questions, { 'testUniqueID': index } , { 'questionUniqueID': index });
+        console.p(index);
         
-        console.p('#single-questions: set context={} for _Template()');
-        console.p('index=' + index);
-          console.p('context=');
-            console.p(context);
-        
-        _Template(context, nextPageId, nextPageClass);
+        _switchPageTo('singleQuestion', index);
       }
     };
     
-    // Execute the needed function depending on the url keyword (stored in nextPage).
-    if(map[nextPageId]){
-      
-      map[nextPageId]();
-      
-      _switchPageTo(nextPageClass);
-      
-      // Save into session and config
-      sessionStorage.setItem('currentPage', nextPageName); /////
-      config.appSession.currentPage = nextPageName; ///////
-      
-    } else {
-      // If the keyword isn't listed in the above - show error alert.
-      inc.UTIL.showAlertBox(inc.TXT.txt.page_does_not_exist, 'danger'); // Show warning for the need to login
+    // Execute the needed function depending on the url keyword (stored in temp).
+    if(map[temp]){
+      map[temp]();
+    } else { // If the keyword isn't listed in the above - render the error page.
       
       console.error('Error: ' + url);
+      
+      // 000000000
+      //renderErrorPage();
     }
   }
   
-  function _switchPageTo(nextPageClass) {
+  function _switchPageTo(nextPage, index) {
+    
+    //console.p('_hidePreviousPage');
     
     var previousPage = {
-      name: '',
       className: ''
-    },
-    // This is the new page which we are showing
-    jNewPage = config.pages.jPages.siblings(nextPageClass),
-    showNewPage = function(jPrevPage) {
-      
-      console.p('@Animating view for new page...');
-      
-      // 00000000
-      // Update aria-hidden => false on next page
-      
-      // => move it to middle of nowhere
-      if(jPrevPage)
-        jPrevPage.removeClass('offset-page')
-                 .addClass('offscreen');
-      
-      // => move it back from the middle of nowhere
-      // => bring opacity up
-      // => move from right to left
-      jNewPage.removeClass('offscreen')
-              .addClass('visible'); // CSS 'transition' will do the rest
     };
     
+    // This is the previous page which we are hiding
     previousPage.name = config.appSession.currentPage;
     
-    console.p('@Previous page: ' + previousPage.name);
+    //console.p('Previous page: ' + previousPage.name);
+    //console.p(requestedPageClass);
     
-    if(previousPage.name === null || previousPage.className === nextPageClass){
+    // 00000000
+    // show aria tags that it is hidden, move it into view
+    
+    // If there is no previous page or it's same page request skip the hiding part
+    if(previousPage.name === null || previousPage.name === nextPage){
       
-      console.p('@previousPage.className="' + previousPage.className + '", so there is no need to hide it since it does not exist or is the same page.');
+      //console.p(previousPage.name);
+      //console.p(nextPage);
       
-      // Start showing new page
-      showNewPage();
+      _showNextPage(nextPage, index);
       
-      return;
+      return true;
     }
-    
-    console.p('@Let\'s hide this: ' + previousPage.name);
     
     previousPage.className = '.' + previousPage.name;
     
     // Get the jQuery object of the page
     previousPage.jObj = config.pages.jPages.siblings(previousPage.className);
     
-    // => bring the opacity down,
-    // => move from right to left,
-    previousPage.jObj.removeClass('visible')
-                     .addClass('offset-page');
+    // Fisrt bring the opacity down, move from right to left, then move it to middle of nowhere
+    previousPage.jObj.removeClass('visible').addClass('offset-page');
     
-    // 00000000
-    // Update aria-hidden => true on previousPage
-    
-    // CSS is set to 500ms, so before showing nextPageClass,
-    // we want to wait until animation is done
+    // CSS is set to 500ms, so before pushing the nextPage, we wan to wait until this one is gone
     setTimeout(function() {
-      showNewPage(previousPage.jObj);
+      previousPage.jObj.addClass('offscreen').removeClass('offset-page');
+      _showNextPage(nextPage, index);
+      //window.waitJS.session_hide = true;
+      return true;
     }, 550);
   }
   
   
-  function _Template(context, nextPageId, nextPageClass) {
+  function _showNextPage(nextPage, index) {
     
-    console.p('@Entered _Template. nextPageId=' + nextPageId + ', nextPageClass=' + nextPageClass);
+    _renderTestPages(nextPage, index);
     
-    // Grab the _Template script
-    var theTemplateScript = $(nextPageId + "-list").html();
+    //console.p('_showNextPages');
     
-    // Compile the _Template
-    var theTemplate = Handlebars.compile(theTemplateScript);
-    var theCompiledHtml = theTemplate(context);
+    var className =  '.' + nextPage;
     
-    // Add the compiled html to the page
-    $(nextPageClass+'-content').html(theCompiledHtml);
+    // This is the new page which we are showing
+    var jNewPage = config.pages.jPages.siblings(className);
+    
+    // 00000000
+    // remove aria tags that it is hidden, move it into view
+    //console.p('nextPage:'+nextPage);
+    //console.p(jNewPage);
+    
+    // Get the page ready, before showing it bring opacity up and then animate it
+    jNewPage.removeClass('offscreen');
+    jNewPage.addClass('visible'); // And CSS transition will do the rest
+    
+    // save into session and config
+    sessionStorage.setItem('currentPage', nextPage);
+    config.appSession.currentPage = nextPage;
   }
   
   
-  function _renderSingleQuestionPage(){
+  function _renderTestPages(nextPage, index){
+    
+    console.p('@_renderTestPages');
+    
+    if(config.pages.built[nextPage] === true)
+      return; // Get it from DOM
+    
+    if (_.isEmpty( config.tests )) {
+      return console.p('@No data, man.');
+    }
+    
+    var context = {};
+    
+    console.p('@Found data in memory, getting the data.');
+    
+    console.p(index + ' is index');
+    console.p(nextPage + ' is nextPage');
+    console.p(config.tests.questions);
+    
+    if(nextPage === 'tests')
+      context.tests = config.tests.tests;
+    
+    if(nextPage === 'question')
+      context = _.find(config.tests, { 'testUniqueID': index });
+    
+    console.p(context);alert('ssd');    
+    if(nextPage === 'single-question')
+      context = _.find(config.tests.tests, { 'testUniqueID': index } , { 'questionUniqueID': index });
+    
+    //var context = {
+    //people: [ 
+    //  { firstName: 'Homer', lastName: 'Simpson' },
+    //  { firstName: 'Peter', lastName: 'Griffin' },
+    //  { firstName: 'Eric', lastName: 'Cartman' },
+    //  { firstName: 'Kenny', lastName: 'McCormick' },
+    //  { firstName: 'Bart', lastName: 'Simpson' }
+    //]
+    //};
+    
+    return _template(context, nextPage);
+  }
+  
+  function _template(context, nextPage) {
+    
+    // Grab the template script
+    var theTemplateScripts = $("#" + nextPage + "-list").html();
+    
+    //console.p(theTemplateScripts);
+    
+    // Compile the template
+    var theTemplate = Handlebars.compile(theTemplateScripts);
+    var theCompiledHtml = theTemplate(context);
+    
+    // Add the compiled html to the page
+    $('.content-' + nextPage).html(theCompiledHtml);
+  }
+  
+  
+  function _renderSingleQuestionPage(className){
     
     
     // Add event listeners to checkboxes and submit button

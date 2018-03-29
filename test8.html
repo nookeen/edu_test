@@ -162,7 +162,7 @@
       <h2 class="center">Tests to Complete</h2>
       
       <!--Your new content will be displayed in here-->
-      <div class="content-tests"></div>
+      <div class="tests-content"></div>
     </div>
   </div>
   
@@ -171,9 +171,9 @@
         {{#each questions}}
           
         <li data-unique-id="{{questionUniqueID}}" data-test-id="{{testUniqueID}}" class="locked questionListItem">
-          <span class="glyphicon glyphicon-chevron-right arrow"></span>
+          <span class="glyphicon glyphicon-chevron-right arrow" aria-hidden="true"></span>
           
-          <span class="status {{statusClassName}}" aria-hidden="true"></span>
+          <span class="status statusClassName" aria-hidden="true"></span>
           
           <a href="#single-question/{{testUniqueID}}/{{questionUniqueID}}">{{questionTitle}}</a>
         </li>
@@ -187,42 +187,38 @@
       <h2 class="center">List of Questions</h2>
       
       <!--Your new content will be displayed in here-->
-      <div class="content-questions"></div>
+      <div class="questions-content"></div>
     </div>
   </div>
   
   
   
+  <script id="answers-list" type="text/x-handlebars-template">
+      <div class="answers-list list">
+        {{#each questions}}
+          
+        <li data-unique-id="{{answerUniqueID}}" data-test-id="{{testUniqueID}}" data-question-id="{{questionUniqueID}}" class="answerListItem">
+          <span class="glyphicon glyphicon-ok" aria-hidden="false" aria-label="Select this answer"></span>
+        </li>
+          
+        {{/each}}
+      </div>
+  </script>
+  <script id="single-question-list" type="text/x-handlebars-template">
+      <div class="single-question list">
+        
+        <li data-unique-id="{{answerUniqueID}}" data-test-id="{{testUniqueID}}" data-question-id="{{questionUniqueID}}" class="answerListItem">
+          <span class="glyphicon glyphicon-ok" aria-hidden="false" aria-label="Select this answer"></span>
+        </li>
+      
+      </div>
+  </script>
   
   <div class="singleQuestion page offscreen">
-    <div id="{{uniqueID}}" class="portfolio_nav">
-      <ul class="stars">
-        <li class="btn_overview"><a href="javascript:void(0);">Overview</a></li>
-        <li class="btn_arrow_l disabled"><a href="javascript:void(0);">Back</a></li>
-        <li class="btn_arrow_r"><a href="javascript:void(0);">Next</a></li>
-      </ul>
-      <div id="slider_{{uniqueID}}" class="slider2">
-        <ul>
-          
-          <div class="quesionHolder" data-question-number="" data-question-unique-id="">
-            <h2></h2>
-            <ul class="question-answers">
-              <li data-answer-unique-id="">
-                <span class="answerTest"></span>
-                <span data-answer-unique-id="" class="answerOption glyphicon glyphicon-ok"></span>
-              </li>
-            </ul>
-            
-            <p class="hint"></p>
-            
-            <p class="answer"></p>
-            
-            <button class="btn sm green fnSubmit">Submit</button>
-          </div>
-          
-        </ul>
-      </div>
-    </div>
+    
+    <div class="single-question-content"></div>
+    <div class="answers-content"></div>
+    
   </div>
 </div>
   

@@ -17,8 +17,10 @@ var UTILITIES_MODULE = (function() {
     return Math.floor(Math.random() * Math.floor(1000000));
   }
   
+  var alertBoxtimeout;
   function showAlertBox(text, alertClass) {
     
+    clearTimeout(alertBoxtimeout);
     //console.p(text);
     //console.p(alertClass);
     
@@ -32,8 +34,15 @@ var UTILITIES_MODULE = (function() {
     
     // Events
     config.jAlertBox.find('.close').on('click', _hideAlertBox);
+    
+    alertBoxtimeout = setTimeout(function() {
+      _hideAlertBox();
+    }, 5000);
   }
   function _hideAlertBox() {
+    // Events
+    config.jAlertBox.find('.close').off('click', _hideAlertBox);
+    
     config.jAlertBox.slideUp(250);
   }
   
@@ -70,7 +79,7 @@ var UTILITIES_MODULE = (function() {
     
     options = _.assign({}, defaultSettings, options);
     
-    console.log('@Entered WaitJS, you\'re in a JS timezone now!');
+    //console.log('@Entered WaitJS, you\'re in a JS timezone now!');
     
     //console.log(options);
     
@@ -80,13 +89,13 @@ var UTILITIES_MODULE = (function() {
     
     runFunction(); // execuuuuuute
     
-    console.p('Lets begin...');
+    //console.p('Lets begin...');
     
     counter = 0,
     
     retry = function() {
       
-      console.log('retrying...');
+      //console.log('retrying...');
       
       response = runFunction();
       
@@ -94,7 +103,7 @@ var UTILITIES_MODULE = (function() {
         
         ++counter;
         
-        console.log('counter:' + counter);
+        //console.log('counter:' + counter);
         
         (config.waitJS[options.waitFor] === true || response === true) ? success() : // ... otherwise
         (options.attempts <= counter && proceed === false) ? console.log('timeout!') : retry();

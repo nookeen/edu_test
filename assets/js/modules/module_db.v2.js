@@ -6,15 +6,15 @@ var DB_MODULE = (function() {
     return;
   }
   
-  var db = new Dexie('astrnomyDBtest31');
+  var db = new Dexie('astrnomyDBtest32');
   
   // Init the DBs
   (function _INIT_DB() {
     db.version(1).stores({
       users: '++userID, &userUniqueID, userName, &userNameLowerCase, userAnswers',
       //testing: '++testID, &testUniqueID, testTitle, testSequence, *questions, &questions.questionUniqueID, questions.questionTitle, questions.questionContent, questions.questionSequence, questions.answerHint, *questions.answers, questions.answers.answerUniqueID, questions.answers.answerSequence, questions.answers.answerText, questions.answers.correctAnswer',
-      tests: '++testID, &testUniqueID, &testTitle, sequence, *questions',
-      questions: '++questionsID, &questionUniqueID, &questionTitle, &questionContent, sequence, answerHint, &testUniqueID, answerForQuestion, *answers',
+      tests: '++testID, &testUniqueID, testTitle, sequence, *questions',
+      questions: '++questionID, &questionUniqueID, questionTitle, questionContent, sequence, answerHint, testUniqueID, *answers',
       answers: '++answerID, &answerUniqueID, sequence, answerText, correctAnswer, testUniqueID, questionUniqueID'
     });
   })();
@@ -35,7 +35,8 @@ var DB_MODULE = (function() {
     tests: [],
     questions: [],
     answers: []
-  };
+  },
+  proceed = false;
   
   var init = (function() {
     
@@ -49,13 +50,6 @@ var DB_MODULE = (function() {
   
   function _loadDBdata() {
     
-    
-    //console.p(processedData.tests);
-    //console.p(processedData.questions);
-    //console.p(processedData.answers);
-    
-    console.p('@Uploading data');
-    
     //db.tests.clear();
     //db.questions.clear();
     //db.answers.clear();
@@ -63,28 +57,40 @@ var DB_MODULE = (function() {
     // Check if DB has been filled
     db.tests.where('testID').above(0).first(function(entry) {
       
+      console.p('@Checking if data exists.');
+      
       //console.p(entry);
       
       // Pre-process data before import data
-      if(!entry)
+      if(!entry) {
+        
+        console.p('@No record was found.');
+        
+        proceed = true;
         _processRawData();
-      else
+      } else {
+        
+        console.p('@DB is there.');
+        
         return _getTests(); // Get data
+      }
       
     }).then(function() {
       
-      console.p('@Data processed (then).');
+      if(proceed === false)
+        return;
+      
+      console.p('@Starting bulkAdd.');
       
       db.tests.bulkAdd( processedData.tests ).catch(Dexie.BulkError, function (e) {
         // Explicitely catching the bulkAdd() operation makes those successful
         // additions commit despite that there were errors.
-        console.error ("Some entries did not succeed. " + e.failures);
+        console.error ("db.tests: Some entries did not succeed. " + e.failures);
       });
       
       db.questions.bulkAdd( processedData.questions ).catch(Dexie.BulkError, function (e) {
-        // Explicitely catching the bulkAdd() operation makes those successful
-        // additions commit despite that there were errors.
-        console.error ("Some entries did not succeed. " + e.failures);
+        
+        console.error ("db.questions: Some entries did not succeed. " + e.failures);
       });
       
       db.answers.bulkAdd( processedData.answers ).then(function() {
@@ -97,8 +103,9 @@ var DB_MODULE = (function() {
       }).catch(Dexie.BulkError, function (e) {
         // Explicitely catching the bulkAdd() operation makes those successful
         // additions commit despite that there were errors.
-        console.error ("Some entries did not succeed. " + e.failures);
+        console.error ("db.answers: Some entries did not succeed. " + e.failures);
       });
+      
     }).catch(function(e) {
       console.error(e, "error");
       return false;
@@ -112,6 +119,8 @@ var DB_MODULE = (function() {
   
   function _getTests() {
     
+    console.p('@Entering _getTests()');
+    
     if(isDataLoaded() === true) {
       
       console.p('The data is available.');
@@ -119,11 +128,7 @@ var DB_MODULE = (function() {
       return;
     }
     
-    //console.p('data:>>>');
     db.tests.toArray(function (data) {
-      
-      //console.p(data);
-      //console.p(config.tests);
       
       config.tests.tests = data;
       
@@ -134,9 +139,6 @@ var DB_MODULE = (function() {
     
     db.questions.toArray(function (data) {
     
-      //console.p(data);
-      //console.p(config.tests);
-      
       config.tests.questions = data;
       
     }).catch(function (e) {
@@ -146,12 +148,12 @@ var DB_MODULE = (function() {
     
     db.answers.toArray(function (data) {
       
-      console.p('@loaded last batch!');
-      
-      //console.p(data);
-      //console.p(config.tests);
-      
       config.tests.answers = data;
+      
+      console.p('@Loaded last batch!');
+      
+      console.p('config.tests =');
+      console.p(config.tests);
       
       // Mark that the data is uplaoded into the DB
       config.appSession.dataLoaded = true;
@@ -165,6 +167,8 @@ var DB_MODULE = (function() {
   function _processRawData() {
     
     //var deferred = new $.Deferred();
+    console.p("rawTestsContent =");
+    console.p(rawTestsContent);
     
     // Need to populate uniqueIDs
     $.each(rawTestsContent, function (key, val) {
@@ -197,7 +201,9 @@ var DB_MODULE = (function() {
       });
     });
     
-    console.p('@Data processed (fn).');
+    console.p('@Data processed in _processRawData.');
+      console.p('processedData =');
+        console.p(processedData);
     
     // This line is what resolves the deferred object
     // and it triggers the .done to execute
@@ -209,7 +215,8 @@ var DB_MODULE = (function() {
   function isDataLoaded() {
     var loaded = false;
     
-    console.p('config.appSession.dataLoaded='+config.appSession.dataLoaded);
+    console.p('@Entering isDataLoaded()');
+      console.p('config.appSession.dataLoaded='+config.appSession.dataLoaded);
     
     (config.appSession.dataLoaded === true) ? loaded = true : null;
       return loaded;
