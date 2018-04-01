@@ -10,7 +10,8 @@ var CONFIG_MODULE = (function() {
     appSession: {
       currentUser: sessionStorage.getItem('userName'), // Get user's name to see if there is a session
       currentPage: null, //sessionStorage.getItem('currentPage'), // Get user's name to see if there is a session
-      dataLoaded: false
+      dataLoaded: false,
+      answers: []
     },
     // Define page structure
     pages: {

@@ -7,8 +7,8 @@ var USERS_MODULE = (function() {
   inc.UTIL = UTILITIES_MODULE;
   inc.DB = DB_MODULE;
   inc.TXT = TXT_MODULE;
-  inc.RENDER = RENDERING_MODULE;
   inc.CONFIG = CONFIG_MODULE;
+  inc.ROUTES = ROUTES_MODULE;
   
   var config = inc.CONFIG.config,
       submittedData = {},
@@ -20,6 +20,7 @@ var USERS_MODULE = (function() {
   for (var key in config.forms) {
     
     temp = config.jBody.find(config.formClassNames[key]);
+    
     forms[key] = {
       from: key,
       formClass: config.formClassNames[key],
@@ -27,23 +28,28 @@ var USERS_MODULE = (function() {
       fields: {
         jUserName: temp.find(config.formClassNames.inputField) // Get form field as jQuery object
       }
-      
     };
   }
   
-  var disableNav = function(){
+  var disableNav = function() {
+    
     clearTimeout(delay);
-    var delay = setTimeout(function(){config.jBody.find('nav').addClass('disabled');}, 2000);
+    
+    var delay = setTimeout(function() {
+      config.jBody.find('nav').addClass('disabled');
+    }, 2000);
   };
   
   // Do isLoggedIn add set event listeners
   forms.login.jObj.on('submit', _login);
+  
   forms.register.jObj.on('submit', _register);
+  
   // Add event listener to logout
   config.jBody.find('.logout').on('click', _logout);
   
   // Show/hide the nav bar
-  (inc.RENDER.isLoggedIn() === true) ? config.jBody.find('nav').addClass('visible').removeClass('disabled') :
+  (inc.UTIL.isLoggedIn() === true) ? config.jBody.find('nav').addClass('visible').removeClass('disabled') :
     config.jBody.find('nav').removeClass('visible', disableNav()); // Hide nav
   
   
@@ -85,7 +91,9 @@ var USERS_MODULE = (function() {
   }
   
   function _logout(e) {
+    
     sessionStorage.removeItem('userName');
+    
     config.appSession.currentUser = '';
     
     console.p('dsd');
@@ -98,15 +106,17 @@ var USERS_MODULE = (function() {
     config.jBody.find('nav').removeClass('visible');
     $('.navbar-collapse').collapse('hide');
     
-    inc.RENDER.route('');
+    inc.ROUTES.route('');
   }
   
   function _resetForm(form) {
+    
     // Reset form field
     forms[form].fields.jUserName.val('');
   }
   
   function _validateUserName(txt) {
+    
     var lettersOnly = /^[A-Za-z]+$/,
         result;
     
@@ -121,6 +131,4 @@ var USERS_MODULE = (function() {
     
     return result;
   }
-  
-  return {};
 })(this);

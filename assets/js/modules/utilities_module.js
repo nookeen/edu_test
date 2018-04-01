@@ -85,6 +85,7 @@ var UTILITIES_MODULE = (function() {
     
     if(_.isEmpty(window.waitJS))
       window.waitJS = {}; 
+    
     config.waitJS[options.waitFor] = false;
     
     runFunction(); // execuuuuuute
@@ -113,10 +114,38 @@ var UTILITIES_MODULE = (function() {
     retry();
   }
   
+  function updateProperties(array, property, string, incr) {
+    
+    var counter = 0;
+    
+    array.forEach(function(element) {
+      
+      ++counter;
+      
+      // If we need to increment, use incr = true
+      (incr === true) ? element[property] = string + counter : element[property] = string;
+    });
+  }
+  
+  function isLoggedIn() {
+    
+    //console.p('@Entered isLoggedIn');
+    
+    var loggedIn = false;
+    
+    (config.appSession.currentUser) ? loggedIn = true : null;
+    
+    //console.p('isLoggedIn=' + loggedIn);
+    
+    return loggedIn;
+  }
+  
   return {
     showAlertBox: showAlertBox,
     createUniqueID: createUniqueID,
     waitJS: waitJS,
-    getRandomInt: getRandomInt
+    getRandomInt: getRandomInt,
+    updateProperties: updateProperties,
+    isLoggedIn: isLoggedIn
   };
 })(this);

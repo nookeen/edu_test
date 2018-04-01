@@ -1,8 +1,6 @@
-//=============================================================================
-// TXT_MODULE
-//=============================================================================
 var TXT_MODULE = (function() {
-  
+"use strict";
+
   // Everything related to view in terms of content and text goes here
   var txt = {};
   

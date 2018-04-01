@@ -6,7 +6,7 @@ var DB_MODULE = (function() {
     return;
   }
   
-  var db = new Dexie('astrnomyDBtest32');
+  var db = new Dexie('astrnomyDBtest34');
   
   // Init the DBs
   (function _INIT_DB() {
@@ -26,11 +26,12 @@ var DB_MODULE = (function() {
   inc.UTIL = UTILITIES_MODULE;
   inc.RENDER = RENDERING_MODULE;
   inc.CONFIG = CONFIG_MODULE;
+  inc.ROUTES = ROUTES_MODULE;
   
-  var txt = inc.TXT.txt,
-      config = inc.CONFIG.config;
+  var txt = inc.TXT.txt, // Add text library into a local var
+      config = inc.CONFIG.config; // config too
   
-  var rawTestsContent = rawData,
+  var rawTestsContent = rawData, // That comes form content.js
   processedData = {
     tests: [],
     questions: [],
@@ -67,7 +68,9 @@ var DB_MODULE = (function() {
         console.p('@No record was found.');
         
         proceed = true;
+        
         _processRawData();
+      
       } else {
         
         console.p('@DB is there.');
@@ -107,7 +110,9 @@ var DB_MODULE = (function() {
       });
       
     }).catch(function(e) {
+      
       console.error(e, "error");
+      
       return false;
     });
     
@@ -229,13 +234,16 @@ var DB_MODULE = (function() {
   //}
   
   function _addUser(userData) {
+    
     db.transaction("rw", db.users, function() {
+      
       return db.users.add({
         userUniqueID: userData.userUniqueID,
         userName: userData.userName,
         userAnswers: {},
         userNameLowerCase: userData.userName.toLowerCase()
       });
+    
     }).then(function(user) {
       
       if(!user) {
@@ -247,9 +255,9 @@ var DB_MODULE = (function() {
       
       console.p('@Adding user: ' + user);
       
-      
       // Added user, login time
       config.appSession.currentUser = userData.userName;
+      
       sessionStorage.setItem('userName', userData.userName);
       
       // Account created msg
@@ -257,8 +265,9 @@ var DB_MODULE = (function() {
       
       // Show menu
       config.jBody.find('nav').addClass('visible').removeClass('disabled');
+      
       // Forward to tests page
-      inc.RENDER.route('#tests');
+      inc.ROUTES.route('#tests');
       
       // Test Log
       //_getAllUsers();
@@ -273,7 +282,9 @@ var DB_MODULE = (function() {
   }
   
   function _getUser(userName) {
+    
     var collection = db.users.where('userNameLowerCase').equalsIgnoreCase(userName);
+    
     collection.first(function(user) {
       
       //console.p(userName);
@@ -292,11 +303,14 @@ var DB_MODULE = (function() {
       
       // Show menu
       config.jBody.find('nav').addClass('visible').removeClass('disabled');
+      
       // Forward to tests page
-      inc.RENDER.route('#tests');
+      inc.ROUTES.route('#tests');
       
     }).catch(function (e) {
+        
         console.p(e, "error");
+        
         return false;
     });
   }
@@ -319,10 +333,12 @@ var DB_MODULE = (function() {
     };
     
     if (requests[action]) {
+      
       requests[action]();
     } else { // If the keyword isn't listed in the above - show error
+      
       console.p('Error: ' + action);
-      console.p(params);
+        console.p(params);
     }
   }
   

@@ -30,18 +30,21 @@
     .then(include.lib('dexie'),
           include.lib('bootstrap', min),
           include.lib('hashids', min),
-          include.lib('underscore-min'),
+          include.lib('lodash', min),
+          include.lib('localscroll'),
           include.lib('handlebars-v4.0.11'),
     // Data for DB import
           include.main('content') )
     // Load modules
-    .then(include.module('module_txt'))
-    .then(include.module('module_config'))
-    .then(include.module('module_utilities'))
-    .then(include.module('module_debug'))
-    .then(include.module('module_rendering.v3'))
-    .then(include.module('module_db.v2'))
-    .then(include.module('module_users'))
+    .then(include.module('txt_module'))
+    .then(include.module('config_module'))
+    .then(include.module('utilities_module'))
+    .then(include.module('debug_module'))
+    .then(include.module('rendering_module.v4'))
+    .then(include.module('routes_module'))
+    .then(include.module('db_module.v2'))
+    .then(include.module('users_module'))
+    .then(include.module('init_module'))
     .thenRun(function () {
       //console.log('load.js: All loaded');
     });

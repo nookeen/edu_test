@@ -1,0 +1,273 @@
+<!doctype html>
+<html class="no-js" lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="text/x-ua-compatible" content="ie=edge">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <meta name="Description" content="Astronomy Course - Introduction" />
+  <meta name="Keywords" content="astronomy, astronomy course, custom made course" />
+  
+  <title>Astronomy Course - Introduction</title>
+  
+  <link href="favicon.ico" type="image/ico" rel="icon"/>
+  
+  <link rel="stylesheet" type="text/css" media="all" href="assets/css/lib/bootstrap.min.css" />
+  <link rel="stylesheet" type="text/css" media="all" href="assets/css/lib/bootstrap.icons.css" />
+  <link rel="stylesheet" type="text/css" media="all" href="assets/css/style.css" />
+  
+</head>
+
+<body>
+
+
+  <div class="preloader" aria-hidden="true">
+    <img src="assets/img/139.gif" alt="Image Preloader graphics" aria-hidden="true" />
+  </div>
+  
+  <!-- Fixed navbar -->
+  <nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+      </div>
+      <div id="navbar" class="navbar-collapse collapse">
+        <ul class="nav navbar-nav">
+          <li><a href="#">Tests</a></li>
+          <li><a href="javascript:void(0);" class="logout">Logout</a></li>
+        </ul>
+      </div><!--/.nav-collapse -->
+    </div>
+  </nav>
+  
+  <div class="alertBox alert alert-dismissible" role="alert" style="display: none;">
+    <button type="button" class="close" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <span class="content"></span>
+  </div>
+  
+  <header class="padding50">
+    <div class="container">
+      <h1 class="center">Astronomy Course</h1>
+      <h2 class="center">Lesson 1</h2>
+    </div>
+  </header>
+  
+  <div class="padding20"></div>
+  
+  <div id="app">
+    
+    <!-- Page: login -->
+    <div class="login page offscreen">
+      <div class="container">
+        <div role="form" lang="en-EN" dir="ltr">
+          
+          <div class="screen-reader-response"></div>
+          
+          <form action="#" method="post" class="login_form" novalidate="novalidate">
+            <div class="row">
+              <div class="col-lg-offset-3 col-sm-offset-3 col-sm-5 no-side-padding">
+                <div class="tnp-field tnp-field-firstname">
+                  
+                  <div class="input-group input-group-lg">
+                    <label for="userName" class="offscreen sr-only">Name</label>
+                    <input type="text" id="userName" name="userName" value="" placeholder="Your Name" size="40" class="form-control userNameClass" aria-required="true" aria-invalid="false" aria-describedby="sizing-addon1" />
+                  </div>
+                  
+                </div>
+              </div>
+              
+              <div class="col-xs-4 col-sm-4 no-side-padding">
+                <input class="btn btn-lg btn-success submit-btn" type="submit" value="Login">
+              </div>
+            </div>
+            
+            <br><br>
+            
+            <div class="center">
+              <p class="sub-text">Do not have an account?</p>
+              <a href="#register" class="btn btn-warning" aria-label="Button to proceed to registration">Register</a>
+            </div>
+            
+          </form>
+        </div>
+        
+      </div>
+    </div>
+    
+    <!-- Page: register -->
+    <div class="register page offscreen">
+      <div class="container">
+        <div role="form" lang="en-EN" dir="ltr">
+          
+          <div class="screen-reader-response"></div>
+          
+          <form action="#register" method="post" class="register_form" novalidate="novalidate">
+            <div class="row">
+              
+              <div class="col-lg-offset-3 col-sm-offset-3 col-sm-5 no-side-padding">
+                <div class="tnp-field tnp-field-firstname">
+                  <div class="input-group input-group-lg">
+                    <label for="registerUserName" class="offscreen sr-only">Name</label>
+                    <input type="text" id="registerUserName" name="registerUserName" value="" placeholder="Your Name" size="40" class="form-control userNameClass" aria-required="true" aria-invalid="false" />
+                  </div>
+                  
+                </div>
+              </div>
+              
+              <div class="col-xs-4 col-sm-4 no-side-padding">
+                <input class="btn btn-lg btn-info submit-btn" type="submit" value="Register">
+              </div>
+            </div>
+            
+            <br><br>
+            
+            <div class="center">
+              <p class="sub-text">Already have an account?</p>
+              <a href="#" class="btn btn-warning router-btn">Login</a>
+            </div>
+            
+          </form>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Page: tests -->
+    <!--This is our template. -->
+    <!--Data will be inserted in its according place, replacing the brackets.-->
+    <script id="tests-list" type="text/x-handlebars-template">
+        <ul class="tests-list list">
+          {{#each tests}}
+          
+          <li data-unique-id="{{testUniqueID}}" class="locked testListItem">
+            <span class="glyphicon glyphicon-chevron-right arrow" aria-hidden="true"></span>
+            
+            <span class="status {{statusClassName}}" aria-hidden="true"></span>
+            
+            <a href="#questions/{{testUniqueID}}">{{testTitle}}</a>
+          </li>
+          
+          {{/each}}
+        </ul>
+    </script>
+    
+    <div class="tests page offscreen">
+      <div class="container">
+        <h2 class="center">Tests to Complete</h2>
+        
+        <!--Your new content will be displayed in here-->
+        <div class="tests-content"></div>
+      </div>
+    </div>
+    
+    
+    
+    
+    
+    
+    <!-- Page: questions -->
+    <script id="questions-list" type="text/x-handlebars-template">
+        <ul class="questions-list list">
+          {{#each questions}}
+            
+          <li data-unique-id="{{questionUniqueID}}" data-test-id="{{testUniqueID}}" class="locked questionListItem">
+            <span class="glyphicon glyphicon-chevron-right arrow" aria-hidden="true"></span>
+            
+            <span class="status statusClassName" aria-hidden="true"></span>
+            
+            <a href="#single-question/{{testUniqueID}}/{{questionUniqueID}}">{{questionNumber}}</a>
+          </li>
+            
+          {{/each}}
+        </ul>
+    </script>
+    
+    <div class="questions page offscreen">
+      <div class="container">
+        <h2 class="center">List of Questions</h2>
+        
+        <!--Your new content will be displayed in here-->
+        <div class="questions-content"></div>
+      </div>
+    </div>
+    
+    
+    
+    
+    
+    
+    
+    <!-- Page: single-question -->
+    <script id="single-question-list" type="text/x-handlebars-template">
+        <div class="single-question-list list">
+          <ul class="single-question-list list">
+          {{#each singleQuestion}}
+          
+            <li class="answerListItem list">
+              <span class="glyphicon glyphicon-ok arrow" aria-hidden="false" aria-label="Select {{answerText}}"></span>
+              <a id="{{answerUniqueID}}" data-unique-id="{{answerUniqueID}}" data-test-id="{{testUniqueID}}" data-question-id="{{questionUniqueID}}" class="answerText" href="javascript:void(0);">{{answerText}}</a>
+            </li>
+          
+          {{/each}}
+          </ul>
+        </div>
+    </script>
+    
+    <div class="single-question page offscreen" data-question-unique-id="" data-test-unique-id="">
+      <div class="container">
+        
+        <h2 class="questionTitle center padding10"></h2>
+        <br>
+        <!--Your new content will be displayed in here-->
+        <div class="single-question-content"></div>
+        
+        <br>&nbsp;
+        
+        <div class="center">
+          <button class="btn btn-lg btn-success confirm">Submit</button>
+        </div>
+        
+        <div class="answers-content" id="answers"></div>
+        
+        <br><br>
+        
+        <div class="answerHint" style="display: none;"></div>
+        
+        <br><br>
+        
+        <div class="questionContent" style="display: none;"></div>
+        
+        <br><br>
+        
+        <div class="center padding20">
+          <a href="#single-question/HASH" class="previous btn btn-warning"><span class="glyphicon glyphicon glyphicon-arrow-left" aria-hidden="true"></span> Previous</a>
+          <a href="#questions/HASH" class="questionList btn btn-warning">Question List</a>
+          <a href="javascript:void(0);" class="next btn btn-warning" disabled="disabled">Next <span class="glyphicon glyphicon glyphicon-arrow-right" aria-hidden="true"></span></a>
+        </div>
+      </div>
+    </div>
+    
+  </div><!-- //app -->
+  
+  <footer class="container padding50">
+    <div class="col-xl-10 offset-xl-1">
+      <p><strong>&copy; Copyright <span class="txt-year" aria-label="Current year"></span></stong></p>
+      <p>All original graphics and text contents presented on this website are the intellectual property and cannot be copied, duplicated, printed or utilized by anyone without the written permission from the owner unless otherwise noted. All other trademarks and copyrights are the property of their respective owners.
+      <br>
+      Version 1.1</p>
+      <div class="padding30"></div>
+    </div>
+  </footer>
+
+<script src="assets/js/lib/load-min.js"></script>
+<script src="assets/js/main.js"></script>
+
+</body>
+</html>

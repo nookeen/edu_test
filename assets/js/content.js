@@ -33,7 +33,7 @@ var rawData = [
             questionUniqueID: null,
             testUniqueID: null,
             sequence: 150,
-            answerText: "A mass makes up about 27% of our universe",
+            answerText: "A mass that makes up about 1/3 of our universe",
             correctAnswer: false
           },
           {
@@ -49,7 +49,7 @@ var rawData = [
       {
         questionUniqueID: null,
         questionTitle: 'What is true about Dark Energy?',
-        questionContent: "\n<ul class=\"questions-list\">\n        <p>More is unknown than is known. We know how much dark energy there is because we know how it affects the universe's expansion. Other than that, it is a complete mystery. But it is an important mystery. It turns out that roughly 68% of the universe is dark energy. Dark matter makes up about 27%. The rest - everything on Earth, everything ever observed with all of our instruments, all normal matter - adds up to less than 5% of the universe. Come to think of it, maybe it shouldn't be called \"normal\" matter at all, since it is such a small fraction of the universe.</p>\n<p><img src=\"assets/img/test1-q2-img1.png\" alt=\"Big Bang Illustration\"></p>\n<h3>Sources</h3>\n<ul>\n<li><a href=\"https://science.nasa.gov/astrophysics/focus-areas/what-is-dark-energy\" target=\"_blank\" rel=\"noopener\">https://science.nasa.gov/astrophysics/focus-areas/what-is-dark-energy</a></li>\n<li><a href=\"http://imgsrc.hubblesite.org/hvi/uploads/image_file/image_attachment/6753/pdf.pdf\" target=\"_blank\" rel=\"noopener\">http://imgsrc.hubblesite.org/hvi/uploads/image_file/image_attachment/6753/pdf.pdf</a></li>\n      </ul>\n</ul>",
+        questionContent: "<p>More is unknown than is known. We know how much dark energy there is because we know how it affects the universe's expansion. Other than that, it is a complete mystery. But it is an important mystery. It turns out that roughly 68% of the universe is dark energy. Dark matter makes up about 27%. The rest - everything on Earth, everything ever observed with all of our instruments, all normal matter - adds up to less than 5% of the universe. Come to think of it, maybe it shouldn't be called \"normal\" matter at all, since it is such a small fraction of the universe.</p>\n<p><img src=\"assets/img/test1-q2-img1.png\" alt=\"Big Bang Illustration\"></p>\n<h3>Sources</h3>\n<ul>\n<li><a href=\"https://science.nasa.gov/astrophysics/focus-areas/what-is-dark-energy\" target=\"_blank\" rel=\"noopener\">https://science.nasa.gov/astrophysics/focus-areas/what-is-dark-energy</a></li>\n<li><a href=\"http://imgsrc.hubblesite.org/hvi/uploads/image_file/image_attachment/6753/pdf.pdf\" target=\"_blank\" rel=\"noopener\">http://imgsrc.hubblesite.org/hvi/uploads/image_file/image_attachment/6753/pdf.pdf</a></li>\n</ul>",
         sequence: 50,
         answerHint: 'This hint might not help you answering this question, but it will try to cheer you up: You can do this!',
         answers: [
@@ -74,7 +74,7 @@ var rawData = [
             questionUniqueID: null,
             testUniqueID: null,
             sequence: 150,
-            answerText: "It's the glow visible from space telescope",
+            answerText: "It's the glow visible from space telescopes",
             correctAnswer: false
           },
           {
@@ -153,10 +153,10 @@ var rawData = [
     questions: [
       {
         questionUniqueID: null,
-        questionTitle: 'Can one go faster than a speed of light?',
-        questionContent: "",
+        questionTitle: 'Do we have a machine that can accelerate particles faster than a speed of light?',
+        questionContent: "Ok, let's try next question.",
         sequence: 50,
-        answerHint: "Of course not, humans can't run this fast",
+        answerHint: "No we do not.",
         answers: [
           {
             answerUniqueID: null,
@@ -179,7 +179,7 @@ var rawData = [
       {
         questionUniqueID: null,
         questionTitle: 'Can neutrinos travel faster than a speed of light?',
-        questionContent: "\n      \n      <p>It was September 2011 and physicist Antonio Ereditato had just shocked the world.<br>The announcement he had made promised to overturn our understanding of the Universe. If the data gathered by 160 scientists working on the OPERA project were correct, the unthinkable had been observed.</p>\n<p>Particles – in this case, neutrinos – had travelled faster than light.According to Einstein's theories of relativity, this should not have been possible. And the implications for showing it had happened were vast. Many bits of physics might have to be reconsidered.</p>\n<p>In the end, it turned out the OPERA result was wrong. A timing problem had been caused by a poorly connected cable that should have been transmitting accurate signals from GPS satellites.<br>There was an unexpected delay in the signal. As a consequence, the measurements of how long the neutrinos took to travel the given distance were off by about 73 nanoseconds, making it look as though they had whizzed along more quickly than light could have done.</p>\n<p>Let's take the second of those questions first. The speed of light in a vacuum is 299,792.458 km (186,282.397 mi) per second – just shy of a nice round 300,000km/s figure. That is pretty nippy. The Sun is 150 million km (about 93,000,000 mi) away from Earth and light takes just eight minutes and 20 seconds to travel that far.</p>\n<h3>Sources</h3>\n<ul>\n<li><a title=\"BCC's website\" href=\"http://www.bbc.com/earth/story/20160429-the-real-reasons-nothing-can-ever-go-faster-than-light\" target=\"_blank\" rel=\"noopener\">http://www.bbc.com/earth/story/20160429-the-real-reasons-nothing-can-ever-go-faster-than-light</a></li>\n</ul>\n",
+        questionContent: "\n      \n      <p>It was September 2011 and physicist Antonio Ereditato had just shocked the world.<br>The announcement he had made promised to overturn our understanding of the Universe. If the data gathered by 160 scientists working on the OPERA project were correct, the unthinkable had been observed.</p>\n<p>Particles - in this case, neutrinos - had travelled faster than light.According to Einstein's theories of relativity, this should not have been possible. And the implications for showing it had happened were vast. Many bits of physics might have to be reconsidered.</p>\n<p>In the end, it turned out the OPERA result was wrong. A timing problem had been caused by a poorly connected cable that should have been transmitting accurate signals from GPS satellites.<br>There was an unexpected delay in the signal. As a consequence, the measurements of how long the neutrinos took to travel the given distance were off by about 73 nanoseconds, making it look as though they had whizzed along more quickly than light could have done.</p>\n<p>Let's take the second of those questions first. The speed of light in a vacuum is 299,792.458 km (186,282.397 mi) per second – just shy of a nice round 300,000km/s figure. That is pretty nippy. The Sun is 150 million km (about 93,000,000 mi) away from Earth and light takes just eight minutes and 20 seconds to travel that far.</p>\n<h3>Sources</h3>\n<ul>\n<li><a title=\"BCC's website\" href=\"http://www.bbc.com/earth/story/20160429-the-real-reasons-nothing-can-ever-go-faster-than-light\" target=\"_blank\" rel=\"noopener\">http://www.bbc.com/earth/story/20160429-the-real-reasons-nothing-can-ever-go-faster-than-light</a></li>\n</ul>\n",
         sequence: 50,
         answerHint: 'This hint might not help you answering this question, but it will try to cheer you up: You can do this!',
         answers: [
@@ -204,7 +204,7 @@ var rawData = [
       {
         questionUniqueID: null,
         questionTitle: 'At what speed Cassini dove through the gap between Saturn and its innnermost ring?',
-        questionContent: "\n<p>In April, Cassini will dive through the gap between Saturn and its innnermost ring at nearly 76,000 miles per hour (about 122,000 kilometers per hour) relative to Saturn’s center, and about 68,000 miles per hour (about 110,000 kilometers per hour) relative to Saturn’s cloud-tops. At that speed you could travel from New York City to Los Angeles in less than three minutes, and it would take just over an hour to travel three times around the Earth at the equator.</p>\n<h3>Sources</h3>\n<ul>\n<li><a title=\"Nasa's Website\" href=\"https://saturn.jpl.nasa.gov/news/2990/cassinis-two-speeds/\" target=\"_blank\" rel=\"noopener\">https://saturn.jpl.nasa.gov/news/2990/cassinis-two-speeds/</a></li>\n</ul>\n",
+        questionContent: "\n<p>In April, Cassini will dive through the gap between Saturn and its innnermost ring at nearly 76,000 miles per hour (about 122,000 kilometers per hour) relative to Saturn's center, and about 68,000 miles per hour (about 110,000 kilometers per hour) relative to Saturn's cloud-tops. At that speed you could travel from New York City to Los Angeles in less than three minutes, and it would take just over an hour to travel three times around the Earth at the equator.</p>\n<h3>Sources</h3>\n<ul>\n<li><a title=\"Nasa's Website\" href=\"https://saturn.jpl.nasa.gov/news/2990/cassinis-two-speeds/\" target=\"_blank\" rel=\"noopener\">https://saturn.jpl.nasa.gov/news/2990/cassinis-two-speeds/</a></li>\n</ul>\n",
         sequence: 50,
         answerHint: 'Tricky, huh? I know, right!',
         answers: [

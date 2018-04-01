@@ -1,6 +1,6 @@
 @charset "UTF-8";
 /*
-Stylesheet by Nookeen Media
+Stylesheet by SB
 (C) Copyright 2018 
 (R) All rights reserved
  */
@@ -8,12 +8,11 @@ Stylesheet by Nookeen Media
 
 /* SB 1 */
 body {
-  background-image: url('../img/bg.jpg');
+  background: #2a2525 url('../img/bg.jpg') no-repeat center center;
   background-size: cover;
 }
-
 p, li {
-  font: 1.2rem tahoma, arial, sans-serif;
+  font: 1.8rem/1.6 tahoma, arial, sans-serif;
   color: #eee;
 }
 
@@ -44,7 +43,7 @@ footer p {
 
 a, a:visited {
   color: #005b80;
-  text-decoration: none;
+  text-decoration: none !important;
 }
 
 a:hover,
@@ -79,8 +78,12 @@ a:active {
   -o-transition: margin-left 500ms linear, opacity 500ms linear;
   transition: margin-left 500ms linear, opacity 500ms linear;
 }
+
 .page.visible {margin-left: 0px; opacity: 1;}
-.offset-page {margin-left: -150px;}
+.page.offset-page {margin-left: -150px;}
+.page.single-question,
+.page.offset-page.single-question,
+.page.visible.single-question {margin-left: 0px !important;}
 /*.page.active {opacity:1;}*/
 
 
@@ -159,11 +162,41 @@ a.btn {
   border-color: #a7948b;
 }
 
+.answerHint,
+.questionContent {
+  padding: 30px;
+  background: rgba(0, 0, 0, .5);
+}
+.answerHint a,
+.questionContent a {
+  color: #0c93fb;
+  word-break: break-word;
+}
+.answerHint a,
+.questionContent a {
+  color: #0c93fb;
+  word-break: break-word;
+}
+.answerHint a,
+.questionContent a:hover {
+  color: #189aff;
+}
+
+div.questionContent,
+div.answerHint {
+  font: 1.8rem/1.6 tahoma, arial, sans-serif;
+  color: #eee;
+}
+
+.questionContent ul li a {word-break: break-word;}
+.questionContent img {padding: 20px 0;}
+
 .list li {
   padding: 0 30px;
   background-color: rgba(220,220,220,0.85);
   margin-top: 10px; 
 }
+.list li.selected,
 .list li:hover {background-color: rgba(230,230,230,1);}
 
 
@@ -175,6 +208,8 @@ a.btn {
   display: block;
   padding: 20px 0 20px 40px;
 }
+
+
 
 .list li span.status {
   display: inline-block;
@@ -189,6 +224,10 @@ a.btn {
   font-size: 2.5rem;
   color: #777;
   line-height: 2.5;
+}
+
+.list li.selected span.arrow  {
+  color: #8dc63f;
 }
 
 /* ____________________________ COMMON CLASSES ____________________________ */
@@ -337,7 +376,7 @@ a:hover .fa {
 .cite a:hover {text-decoration:none;}
 
 .overflow_hidden {overflow: hidden;} /* In portfolio this shit is needed otherwise the dam height is 0!! WTF!? */
-.hide {display: none;}
+.hide, .hidden {display: none;}
 .relative {position: relative;}
 
 .highlighted {background: #e6e6e6;}
@@ -393,15 +432,6 @@ blockquote {border: none;}
 /* Extra Small Devices, Phones */ 
 @media only screen and (max-width : 480px) {
   
-  h1, h2, h3, h4 {
-    font-size: 1.2rem;
-    letter-spacing: 2px;
-  }
-  
-  section h3 {
-    font-size: 0.92em;
-    line-height: 1.5;
-  }
   
 }
 
