@@ -10,6 +10,7 @@ Stylesheet by SB
 body {
   background: #2a2525 url('../img/bg.jpg') no-repeat center center;
   background-size: cover;
+  background-attachment: fixed; 
 }
 p, li {
   font: 1.8rem/1.6 tahoma, arial, sans-serif;
@@ -52,8 +53,8 @@ a:active {
   text-decoration: none;
 }
 
-.app {
-  min-height: 450px;
+#app {
+  min-height: 580px;
   width: 100%;
 }
 

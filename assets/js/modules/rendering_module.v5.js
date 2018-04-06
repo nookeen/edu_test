@@ -9,7 +9,8 @@ var RENDERING_MODULE = (function() {
   inc.CONFIG = CONFIG_MODULE;
   
   var config = inc.CONFIG.config,
-      pages = {};
+  setAction = {},
+  context = {};
   
   // The main function for rendering
   function render(url) {
@@ -19,7 +20,6 @@ var RENDERING_MODULE = (function() {
     if (_.isEmpty( config.tests )) {
       return console.p('@No data, man. Stop!');
     }
-    var context = {};
     
     console.p('@Data is available in config.tests');
     
@@ -102,20 +102,20 @@ var RENDERING_MODULE = (function() {
         context.singleQuestion = _.filter(config.tests.answers, { 'testUniqueID': index[1] } && { 'questionUniqueID': index[2] });
         context.singleQuestion = _.orderBy(context.singleQuestion, ['sequence'], ['asc']);
         
-        var jSingleQuestion = config.pages.jPages.siblings('.single-question.page');
+        context.jSingleQuestion = config.pages.jPages.siblings('.single-question.page');
         context.currentQuestion = _.find(config.tests.questions, { 'questionUniqueID': index[2] });
         
         //console.p('context.currentQuestion=');
         //  console.p(context.currentQuestion);
         //    console.p('index=');
         //      console.p(index);
-        //       console.p('config.tests.questions=');
-        //         console.p(config.tests.questions);
-                    console.p(jSingleQuestion);
+        //        console.p('config.tests.questions=');
+        //          console.p(config.tests.questions);
+        //            console.p(jSingleQuestion);
         
         
         // Add title thru jQuery
-        jSingleQuestion.find('h2.questionTitle').text(context.currentQuestion.questionTitle);
+        context.jSingleQuestion.find('h2.questionTitle').text(context.currentQuestion.questionTitle);
         
         //console.p('#single-questions: set context={} for _Template()');
         //  console.p('index=');
@@ -128,7 +128,7 @@ var RENDERING_MODULE = (function() {
           //_Template(context, nextPageID, nextPageClass);
           
           
-          _renderSingleQuestionPage(jSingleQuestion, context, nextPageClass);
+          //_renderSingleQuestionPage(jSingleQuestion, context, nextPageClass);
         //}, 100);
         
       }
@@ -143,8 +143,7 @@ var RENDERING_MODULE = (function() {
       
       map[nextPageID]();
       
-      if(nextPageClass !== '#single-question')
-        _switchPageTo(nextPageClass, nextPageID, context);
+      _switchPageTo(nextPageClass, nextPageID, context);
       
       // Save into session and config
       sessionStorage.setItem('currentPage', nextPageName);
@@ -162,25 +161,67 @@ var RENDERING_MODULE = (function() {
     }
   }
   
+  
   //============================================================================
   // _switchPageTo
   //============================================================================
   
+  
+  //function _switchPageTo() {
   function _switchPageTo(nextPageClass, nextPageID, context) {
     
-    // Hide Previous page
-    // Template fills the div
-    // Show new page
-    flow.define(_hidePreviousPage(nextPageClass),
-                _Template(context, nextPageID, nextPageClass),
-                _showNewPage(nextPageClass)
-    );
+    console.p('nextPageClass, nextPageID, context');
+    console.p(nextPageClass, ' ', nextPageID, ' ', context);
+    
+    setAction = {
+      
+      '_hidePreviousPage': function(success) {
+        
+        (success === true) ? setAction._Template(false) : _hidePreviousPage(nextPageClass);
+        
+        //console.p('@action: _hidePreviousPage done.');
+      },
+      
+      '_Template': function(success) {
+        
+        if(nextPageClass === '.single-question')
+          (success === true) ? setAction._renderSingleQuestionPage(false) : _Template(context, nextPageID, nextPageClass);
+        else if (nextPageClass === '.login' || nextPageClass === '.register')
+          setAction._showNewPage(false);
+        else
+          (success === true) ? setAction._showNewPage(false) : _Template(context, nextPageID, nextPageClass);
+        
+        //console.p('@action: _Template done.');
+      },
+      
+      '_renderSingleQuestionPage': function(success) {
+        
+        (success === true) ? setAction._showNewPage(false) : _renderSingleQuestionPage(context, nextPageClass);
+        
+        //console.p('@action: _Template done.');
+      },
+      
+      '_showNewPage': function(success) {
+        
+        (success === true) ? setAction.stop() : _showNewPage(nextPageClass);
+        
+        //console.p('@action: _Template done.');
+      },
+      
+      'stop': function() {
+        
+        return true;
+      }
+    };
+    
+    setAction._hidePreviousPage(false);
   }
   
   //============================================================================
   // _hidePreviousPage
   //============================================================================
   
+  //function _hidePreviousPage() {
   function _hidePreviousPage(nextPageClass) {
     
     var previousPage = {
@@ -190,16 +231,23 @@ var RENDERING_MODULE = (function() {
     
     previousPage.name = config.appSession.currentPage;
     
-    //console.p('@previousPage.className="' + previousPage.className + '", exists = ' + exists);
+    console.p('@previousPage.className="' + previousPage.className + '", nextPageClass = ' + nextPageClass);
       //console.p('@previousPage=');
         //console.p(previousPage);
     
-    if (previousPage.className === null || previousPage.className === nextPageClass)
+    if (previousPage.className === null){
+      setAction._hidePreviousPage(true);
       return true;
-    
-    console.p('@Let\'s hide this: ' + previousPage.name);
+    }
     
     previousPage.className = '.' + previousPage.name;
+    
+    if (previousPage.className === nextPageClass) {
+      setAction.stop(true);
+      return true;
+    }
+    
+    console.p('@Let\'s hide this: ' + previousPage.name);
     
     // Get the jQuery object of the page
     previousPage.jObj = config.pages.jPages.siblings(previousPage.className);
@@ -217,26 +265,26 @@ var RENDERING_MODULE = (function() {
     // we want to wait until animation is done
     setTimeout(function() {
       
-      console.p('@setTimeout done, the previous page must be hidden completely.');
+      console.p('@setTimeout done, the previous page is hidden completely.');
       
       // 4. => Remove offset so it would not cause slide conflict
       previousPage.jObj.addClass('offscreen').removeClass('offset-page');
       
+      setAction._hidePreviousPage(true);
+      
       return true; // The page is now gone
     
-    }, 2000);
+    }, 500);
   }
   
   //============================================================================
   // _Template
   //============================================================================
   
+  //function _Template() {
   function _Template(context, nextPageID, nextPageClass) {
     
-    //console.p('@Entered _Template. nextPageID=' + nextPageID + ', nextPageClass=' + nextPageClass);
-    
-    if (nextPageClass === '.login' && nextPageClass === '.register')
-      return true;
+    console.p('@Entered _Template. nextPageID=' + nextPageID + ', nextPageClass=' + nextPageClass);
     
     // Grab the _Template script
     var theTemplateScript = config.jBody.find(nextPageID + "-list").html();
@@ -248,6 +296,8 @@ var RENDERING_MODULE = (function() {
     // Add the compiled html to the page
     config.jBody.find(nextPageClass + '-content').html(theCompiledHtml);
     
+    setAction._Template(true);
+    
     console.p('@_Template. built, moving on.');
     
     return true;
@@ -257,6 +307,7 @@ var RENDERING_MODULE = (function() {
   // _showNewPage
   //============================================================================
   
+  //function _showNewPage() {
   function _showNewPage(nextPageClass) {
     
     console.p('@_showNewPage.');
@@ -283,7 +334,6 @@ var RENDERING_MODULE = (function() {
   
   
   
-  
   // ---
   // ---
   // ---
@@ -291,18 +341,20 @@ var RENDERING_MODULE = (function() {
   // ---
   // ---
   // ---
-  function _renderSingleQuestionPage(jPageObj, context, nextPageClass){
+  function _renderSingleQuestionPage(context, nextPageClass){
     
-    console.p(jPageObj);
-    console.p(nextPageClass);
-    console.p(context);
+    //console.p(jSingleQuestion);
+    //console.p(nextPageClass);jSingleQuestion
+    //console.p(context);
     
     var qID = context.singleQuestion[0].questionUniqueID;
     var tID = context.singleQuestion[0].testUniqueID;
     var aID = '';
     
+    var jSingleQuestion = context.jSingleQuestion;
+    
     // Set Questions Overview
-    jPageObj.find('.btn.questionList').attr('href','#questions/' + tID);
+    jSingleQuestion.find('.btn.questionList').attr('href','#questions/' + tID);
     
     //console.log('localStorage=');
       //console.log(localStorage);
@@ -334,14 +386,14 @@ var RENDERING_MODULE = (function() {
     var jsvoid = 'javascript:void(0)';
     
     if(previous)
-      jPageObj.find('.btn.previous').attr('href','#single-question/' + tID + '/' + previous.questionUniqueID).removeAttr('disabled');
+      jSingleQuestion.find('.btn.previous').attr('href','#single-question/' + tID + '/' + previous.questionUniqueID).removeAttr('disabled');
     else
-      jPageObj.find('.btn.previous').attr('href', jsvoid).attr('disabled','disabled');
+      jSingleQuestion.find('.btn.previous').attr('href', jsvoid).attr('disabled','disabled');
     
     if(next)
-      jPageObj.find('.btn.next').attr('href','#single-question/' + tID + '/' + next.questionUniqueID).removeAttr('disabled');
+      jSingleQuestion.find('.btn.next').attr('href','#single-question/' + tID + '/' + next.questionUniqueID).removeAttr('disabled');
     else
-      jPageObj.find('.btn.next').attr('href','#questions/' + tID);
+      jSingleQuestion.find('.btn.next').attr('href','#questions/' + tID);
     
     
     aID = localStorage.getItem(qID);
@@ -351,7 +403,7 @@ var RENDERING_MODULE = (function() {
     //console.log(tID);
     //console.log(sessionStorage);
     //console.log(localStorage);
-    //console.log(jPageObj);
+    //console.log(jSingleQuestion);
     
     if(aID !== null){
       
@@ -366,19 +418,19 @@ var RENDERING_MODULE = (function() {
     //
     //
     // Add toggle event to this set
-    jPageObj.find('.list li a').on('click', function(){
+    jSingleQuestion.find('.list li a').on('click', function(){
       
       console.p('@Onclick event added to "list li a"');
       
       var jThis = $(this);
       
-      jPageObj.find('.list li').removeClass('selected');
+      jSingleQuestion.find('.list li').removeClass('selected');
       
       jThis.parent().addClass('selected');
     });
     //
     // Then on submit check if the answer is correct
-    jPageObj.find('.btn.confirm').on('click', function() {
+    jSingleQuestion.find('.btn.confirm').on('click', function() {
       
       console.p('@Onclick event added to ".btn.confirm"');
       
@@ -388,21 +440,21 @@ var RENDERING_MODULE = (function() {
     //
     // ------
     
-    console.p('passed');
-    
     
     // Hide questionContent
-    jPageObj.find('.questionContent, .answerHint').slideUp(1);
+    jSingleQuestion.find('.questionContent, .answerHint').slideUp(1);
     
     // Remove attribute 
-    jPageObj.find('.btn.confirm').removeAttr('disabled');
+    jSingleQuestion.find('.btn.confirm').removeAttr('disabled');
     
     // Disable NEXT button
-    jPageObj.find('.next').attr('disabled', 'disabled');
+    jSingleQuestion.find('.next').attr('disabled', 'disabled');
     
     // Remove class selected from li elements
-    jPageObj.find('.list li').removeClass('selected');
+    jSingleQuestion.find('.list li').removeClass('selected');
     
+    
+    setAction._renderSingleQuestionPage(true);
     
     
     function _onQuestionSubmit(){
@@ -411,7 +463,7 @@ var RENDERING_MODULE = (function() {
       
       
       
-      var auID = jPageObj.find('.list li.selected a').attr("data-unique-id");
+      var auID = jSingleQuestion.find('.list li.selected a').attr("data-unique-id");
       
       //console.log('auID = ' + auID);
       //console.log('context.singleQuestion=');
@@ -432,7 +484,7 @@ var RENDERING_MODULE = (function() {
     
     function showHint(hide) {
       
-      var jObj = jPageObj.find('.answerHint');
+      var jObj = jSingleQuestion.find('.answerHint');
       
       (hide === false) ? jObj.slideUp(100) : jObj.html(context.currentQuestion.answerHint).slideUp(1).slideDown(500);
       
@@ -456,7 +508,7 @@ var RENDERING_MODULE = (function() {
         duration: 1000,
         easing: 'swing',
         onAfter: function() {
-          jPageObj.find('.questionContent').html(object).slideDown(1000);
+          jSingleQuestion.find('.questionContent').html(object).slideDown(1000);
         }
       });
       
@@ -465,24 +517,24 @@ var RENDERING_MODULE = (function() {
       // E V E N T S .off
       //
       //
-      jPageObj.find('.btn.confirm').off('click').attr('disabled','disabled');
+      jSingleQuestion.find('.btn.confirm').off('click').attr('disabled','disabled');
       //
-      jPageObj.find('.list li a').off('click');
+      jSingleQuestion.find('.list li a').off('click');
       //
       //
       //---
       
       // Enable NEXT button, add URL to it
-      jPageObj.find('.next').removeAttr('disabled');
+      jSingleQuestion.find('.next').removeAttr('disabled');
       
-      //console.log(jPageObj.find('.list li a#' + qID));
-      //  console.log(jPageObj.find('.list li a#' + qID).parent('li'));
+      //console.log(jSingleQuestion.find('.list li a#' + qID));
+      //  console.log(jSingleQuestion.find('.list li a#' + qID).parent('li'));
       //    console.log(auID);
       //      console.log(qID);
       
       showHint(false);
       
-      jPageObj.find('.list li a#' + auID).parent().addClass('selected');
+      jSingleQuestion.find('.list li a#' + auID).parent().addClass('selected');
       
       // Mark question as solved by adding it to session variable and DB
       // Save into localStorage since sessions do expire
