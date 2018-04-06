@@ -11,8 +11,9 @@ var INIT_MODULE = (function() {
   inc.DB = DB_MODULE;
   inc.ROUTES = ROUTES_MODULE;
   
-  var config = inc.CONFIG.config,
-      pages = {};
+  var config = inc.CONFIG.config;
+  
+  config.jBody.find('#app').css('min-height', config.jWindow.height());
   
   var init = function() {
     

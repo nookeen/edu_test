@@ -55,13 +55,13 @@
   
   <header class="padding50">
     <div class="container">
-      <h1 class="center">Astronomy Course</h1>
-      <h2 class="center">Lesson 1</h2>
+      <h1 class="center">Astronomy Course - Lesson 1</h1>
     </div>
   </header>
   
   <div class="padding20"></div>
   
+  <!-- Let the app begin!!! -->
   <div id="app">
     
     <!-- Page: login -->
@@ -147,11 +147,19 @@
           {{#each tests}}
           
           <li data-unique-id="{{testUniqueID}}" class="locked testListItem">
-            <span class="glyphicon glyphicon-chevron-right arrow" aria-hidden="true"></span>
-            
-            <span class="status {{statusClassName}}" aria-hidden="true"></span>
-            
-            <a href="#questions/{{testUniqueID}}">{{testTitle}}</a>
+            <a href="#questions/{{testUniqueID}}">
+              <div class="row">
+                <div class="col-xs-1">
+                  <span class="glyphicon glyphicon-chevron-right arrow" aria-hidden="true"></span>
+                </div>
+                <div class="col-xs-10 no-side-padding">
+                  {{testTitle}}
+                </div>
+                <div class="col-xs-1">
+                  <span class="status {{statusClassName}}" aria-hidden="true"></span>
+                </div>
+              </div>
+            </a>
           </li>
           
           {{/each}}
@@ -160,10 +168,12 @@
     
     <div class="tests page offscreen">
       <div class="container">
-        <h2 class="center">Tests to Complete</h2>
-        
-        <!--Your new content will be displayed in here-->
-        <div class="tests-content"></div>
+        <div class="col-lg-offset-2 col-lg-8 col-lg-inset-2">
+          <h2 class="center">Tests to Complete</h2>
+          
+          <!--Your new content will be displayed in here-->
+          <div class="tests-content"></div>
+        </div>
       </div>
     </div>
     
@@ -178,11 +188,19 @@
           {{#each questions}}
             
           <li data-unique-id="{{questionUniqueID}}" data-test-id="{{testUniqueID}}" class="locked questionListItem">
-            <span class="glyphicon glyphicon-chevron-right arrow" aria-hidden="true"></span>
-            
-            <span class="status statusClassName" aria-hidden="true"></span>
-            
-            <a href="#single-question/{{testUniqueID}}/{{questionUniqueID}}">{{questionNumber}}</a>
+            <a href="#single-question/{{testUniqueID}}/{{questionUniqueID}}">
+              <div class="row">
+                <div class="col-xs-1">
+                  <span class="glyphicon glyphicon-chevron-right arrow" aria-hidden="true"></span>
+                </div>
+                <div class="col-xs-10 no-side-padding">
+                  {{questionNumber}}
+                </div>
+                <div class="col-xs-1">
+                  <span class="status statusClassName" aria-hidden="true"></span>
+                </div>
+              </div>
+            </a>
           </li>
             
           {{/each}}
@@ -191,10 +209,12 @@
     
     <div class="questions page offscreen">
       <div class="container">
-        <h2 class="center">List of Questions</h2>
-        
-        <!--Your new content will be displayed in here-->
-        <div class="questions-content"></div>
+        <div class="col-lg-offset-2 col-lg-8 col-lg-inset-2">
+          <h2 class="center">List of Questions</h2>
+          
+          <!--Your new content will be displayed in here-->
+          <div class="questions-content"></div>
+        </div>
       </div>
     </div>
     
@@ -211,8 +231,16 @@
           {{#each singleQuestion}}
           
             <li class="answerListItem list">
-              <span class="glyphicon glyphicon-ok arrow" aria-hidden="false" aria-label="Select {{answerText}}"></span>
-              <a id="{{answerUniqueID}}" data-unique-id="{{answerUniqueID}}" data-test-id="{{testUniqueID}}" data-question-id="{{questionUniqueID}}" class="answerText" href="javascript:void(0);">{{answerText}}</a>
+              <a id="{{answerUniqueID}}" data-unique-id="{{answerUniqueID}}" data-test-id="{{testUniqueID}}" data-question-id="{{questionUniqueID}}" class="answerText" href="javascript:void(0);">
+                <div class="row">
+                  <div class="col-xs-1">
+                    <span class="glyphicon glyphicon-ok arrow" aria-hidden="false" aria-label="Select {{answerText}}"></span>
+                  </div>
+                  <div class="col-xs-10 no-side-padding">
+                    {{answerText}}
+                  </div>
+                </div>
+              </a>
             </li>
           
           {{/each}}
@@ -224,45 +252,35 @@
       <div class="container">
         
         <div class="row">
-          <div class="col-md-6">
+          <div class="col-md-6 question-texts">
+            
+            <h3 class="questionTitle center"></h3>
+            <div class="questionContent" id="answers" style="display: none;"></div>
+            <div class="answerHint" id="hint" style="display: none;"></div>
           
+          </div>
+          <div class="col-md-6">
+            
             <!--Your new content will be displayed in here-->
             <div class="single-question-content"></div>
-          
-          </div>
-          <div class="col-md-6">
             
-            <h2 class="questionTitle center"></h2>
+            <br>
             
-            <br><br>
+            <div class="center">
+              <button class="btn btn-lg btn-success confirm">Confirm</button>
+            </div>
             
-            <div class="answers-content"></div>
+            <br>
             
-            <br><br>
+            <div class="center padding20">
+              <a href="#single-question/HASH" class="previous btn btn-warning"><span class="glyphicon glyphicon glyphicon-arrow-left" aria-hidden="true"></span> Previous</a>
+              <a href="#questions/HASH" class="questionList btn btn-warning">Question List</a>
+              <a href="javascript:void(0);" class="next btn btn-warning" disabled="disabled">Next <span class="glyphicon glyphicon glyphicon-arrow-right" aria-hidden="true"></span></a>
+            </div>
             
-            <div class="answerHint" id="hint" style="display: none;"></div>
-            
-            <br><br>
-            
-            <div class="questionContent" id="answers" style="display: none;"></div>
           </div>
         </div>
         
-        <br>
-        <br>
-        
-        <div class="center">
-          <button class="btn btn-lg btn-success confirm">Submit</button>
-        </div>
-        
-        <br>
-        <br>
-        
-        <div class="center padding20">
-          <a href="#single-question/HASH" class="previous btn btn-warning"><span class="glyphicon glyphicon glyphicon-arrow-left" aria-hidden="true"></span> Previous</a>
-          <a href="#questions/HASH" class="questionList btn btn-warning">Question List</a>
-          <a href="javascript:void(0);" class="next btn btn-warning" disabled="disabled">Next <span class="glyphicon glyphicon glyphicon-arrow-right" aria-hidden="true"></span></a>
-        </div>
       </div>
     </div>
     

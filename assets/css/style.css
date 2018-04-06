@@ -10,16 +10,19 @@ Stylesheet by SB
 body {
   background: #2a2525 url('../img/bg.jpg') no-repeat center center;
   background-size: cover;
-  background-attachment: fixed; 
+  background-attachment: fixed;
+  overflow-x: hidden;
 }
 p, li {
-  font: 1.8rem/1.6 tahoma, arial, sans-serif;
+  font: 1.4rem/1.6 tahoma, arial, sans-serif;
   color: #bbb;
 }
 
 h1, h2, h3, h4 {
   color: #eee; 
 }
+
+h3 {font-size: 2rem;}
 
 footer h1,
 footer h2,
@@ -54,7 +57,6 @@ a:active {
 }
 
 #app {
-  min-height: 580px;
   width: 100%;
 }
 
@@ -163,16 +165,15 @@ a.btn {
   border-color: #a7948b;
 }
 
-.answerHint,
+.question-texts {
+  padding: 20px;
+  background: rgba(0, 0, 0, .5);
+}
+/*.answerHint,
 .questionContent {
   padding: 30px;
   background: rgba(0, 0, 0, .5);
-}
-.answerHint a,
-.questionContent a {
-  color: #0c93fb;
-  word-break: break-word;
-}
+}*/
 .answerHint a,
 .questionContent a {
   color: #0c93fb;
@@ -185,46 +186,50 @@ a.btn {
 
 div.questionContent,
 div.answerHint {
-  font: 1.8rem/1.6 tahoma, arial, sans-serif;
+  font: 1.4rem/1.6 tahoma, arial, sans-serif;
   color: #eee;
 }
 
 .questionContent ul li a {word-break: break-word;}
-.questionContent img {padding: 20px 0;}
+.questionContent img {
+  padding: 20px 0;
+  max-width: 100%;
+  height: auto;
+}
 
+ul.list {padding: 0;}
 .list li {
-  padding: 0 30px;
+  padding: 0;
   background-color: rgba(220,220,220,0.85);
-  margin-top: 10px; 
+  margin-top: 10px;
+}
+.list li:first-child {
+  margin-top: 0px;
 }
 .list li.selected,
 .list li:hover {background-color: rgba(230,230,230,1);}
 
-
 .list li,
 .list li a {
-  font: bold 2.1rem Helvetica, arial, sans-serif;
+  font: bold 1.8rem Helvetica, arial, sans-serif;
 }
 .list li a {
   display: block;
-  padding: 20px 0 20px 40px;
+  padding: 15px;
 }
 
-
-
 .list li span.status {
-  display: inline-block;
+  display: block;
   float: right;
 }
 .list li span.arrow {
-  float: left;
+  display: block;
 }
 
 .list li span.status,
 .list li span.arrow  {
-  font-size: 2.5rem;
+  font-size: 2rem;
   color: #777;
-  line-height: 2.5;
 }
 
 .list li.selected span.arrow  {
@@ -413,10 +418,9 @@ blockquote {border: none;}
 
 /* Medium Devices, Desktops */
 @media only screen and (max-width : 992px) {
-  img {
-    height: auto;
-    max-width: 300px;
-    width: auto;
+  .no-side-padding {
+    padding-left: 15px;
+    padding-right: 15px;
   }
 }
 

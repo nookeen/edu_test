@@ -15,7 +15,7 @@ var RENDERING_MODULE = (function() {
   // The main function for rendering
   function render(url) {
     
-    console.p('@Entering _render(' + url +')');
+    //console.p('@Entering _render(' + url +')');
     
     if (_.isEmpty( config.tests )) {
       return console.p('@No data, man. Stop!');
@@ -32,9 +32,9 @@ var RENDERING_MODULE = (function() {
     var nextPageClass = nextPageID.replace('#','.'),
         nextPageName = nextPageID.replace('#','');
     
-    console.p('@Set nextPageID=' + nextPageID + ' from the url: ' + url);
-      console.p('@Set nextPageClass=' + nextPageClass);
-        console.p('@Set nextPageName=' + nextPageName);
+    //console.p('@Set nextPageID=' + nextPageID + ' from the url: ' + url);
+    //  console.p('@Set nextPageClass=' + nextPageClass);
+    //    console.p('@Set nextPageName=' + nextPageName);
     
     var index = false;
     
@@ -86,10 +86,10 @@ var RENDERING_MODULE = (function() {
         // So users would not know what to expect
         inc.UTIL.updateProperties(context.questions, 'questionNumber', 'Question ', true);
         
-        console.p('#questions: set context={} for _Template()');
-          console.p('index=' + index);
-            console.p('context=');
-              console.p(context);
+        //console.p('#questions: set context={} for _Template()');
+        //  console.p('index=' + index);
+        //    console.p('context=');
+        //      console.p(context);
       },
       
       '#single-question': function() {
@@ -113,24 +113,11 @@ var RENDERING_MODULE = (function() {
         //          console.p(config.tests.questions);
         //            console.p(jSingleQuestion);
         
-        
-        // Add title thru jQuery
-        context.jSingleQuestion.find('h2.questionTitle').text(context.currentQuestion.questionTitle);
-        
         //console.p('#single-questions: set context={} for _Template()');
         //  console.p('index=');
         //    console.p(index);
         //      console.p('context=');
         //        console.p(context);
-        //return
-        
-        //setTimeout(function() {
-          //_Template(context, nextPageID, nextPageClass);
-          
-          
-          //_renderSingleQuestionPage(jSingleQuestion, context, nextPageClass);
-        //}, 100);
-        
       }
     };
     
@@ -170,19 +157,22 @@ var RENDERING_MODULE = (function() {
   //function _switchPageTo() {
   function _switchPageTo(nextPageClass, nextPageID, context) {
     
-    console.p('nextPageClass, nextPageID, context');
-    console.p(nextPageClass, ' ', nextPageID, ' ', context);
+    //console.p('nextPageClass, nextPageID, context');
+    //console.p(nextPageClass, ' ', nextPageID, ' ', context);
     
     setAction = {
       
       '_hidePreviousPage': function(success) {
         
-        (success === true) ? setAction._Template(false) : _hidePreviousPage(nextPageClass);
+        (success === true) ? setAction._Template(false) : _hidePreviousPage(nextPageClass, context);
         
         //console.p('@action: _hidePreviousPage done.');
       },
       
       '_Template': function(success) {
+        
+        //console.p('nextPageClass, nextPageID, context');
+        //console.p(nextPageClass, ' ', nextPageID, ' ', context);
         
         if(nextPageClass === '.single-question')
           (success === true) ? setAction._renderSingleQuestionPage(false) : _Template(context, nextPageID, nextPageClass);
@@ -196,9 +186,9 @@ var RENDERING_MODULE = (function() {
       
       '_renderSingleQuestionPage': function(success) {
         
-        (success === true) ? setAction._showNewPage(false) : _renderSingleQuestionPage(context, nextPageClass);
+        console.p('@action: _renderSingleQuestionPage. success=', success);
         
-        //console.p('@action: _Template done.');
+        (success === true) ? setAction._showNewPage(false) : _renderSingleQuestionPage(context, nextPageClass);
       },
       
       '_showNewPage': function(success) {
@@ -242,7 +232,7 @@ var RENDERING_MODULE = (function() {
     
     previousPage.className = '.' + previousPage.name;
     
-    if (previousPage.className === nextPageClass) {
+    if (previousPage.className === nextPageClass && previousPage.className !== '.single-question') {
       setAction.stop(true);
       return true;
     }
@@ -296,9 +286,9 @@ var RENDERING_MODULE = (function() {
     // Add the compiled html to the page
     config.jBody.find(nextPageClass + '-content').html(theCompiledHtml);
     
-    setAction._Template(true);
+    console.p('@_Template added to DOM, moving on.');
     
-    console.p('@_Template. built, moving on.');
+    setAction._Template(true);
     
     return true;
   }
@@ -343,6 +333,9 @@ var RENDERING_MODULE = (function() {
   // ---
   function _renderSingleQuestionPage(context, nextPageClass){
     
+    
+    console.p('@_renderSingleQuestionPage starting...');
+    
     //console.p(jSingleQuestion);
     //console.p(nextPageClass);jSingleQuestion
     //console.p(context);
@@ -355,6 +348,10 @@ var RENDERING_MODULE = (function() {
     
     // Set Questions Overview
     jSingleQuestion.find('.btn.questionList').attr('href','#questions/' + tID);
+    
+    // Add title thru jQuery
+    context.jSingleQuestion.find('.questionTitle').text(context.currentQuestion.questionTitle);
+    
     
     //console.log('localStorage=');
       //console.log(localStorage);
@@ -409,6 +406,8 @@ var RENDERING_MODULE = (function() {
       
       console.p("SOLVED!");
       
+      setAction._renderSingleQuestionPage(true);
+      
       answerSolved(aID);
       
       return;
@@ -454,6 +453,8 @@ var RENDERING_MODULE = (function() {
     jSingleQuestion.find('.list li').removeClass('selected');
     
     
+    console.p('@b4 setAction._renderSingleQuestionPage(true)');
+    
     setAction._renderSingleQuestionPage(true);
     
     
@@ -489,9 +490,10 @@ var RENDERING_MODULE = (function() {
       (hide === false) ? jObj.slideUp(100) : jObj.html(context.currentQuestion.answerHint).slideUp(1).slideDown(500);
       
       if(hide !== false){
-        $.scrollTo('#hint', {
+        $.scrollTo('body', {
           duration: 1000,
-          easing: 'swing'
+          easing: 'swing',
+          offset: -60
         });
       }
     }
@@ -504,9 +506,10 @@ var RENDERING_MODULE = (function() {
       //console.log(object);
       //console.log('auID = ' + auID);
       
-      $.scrollTo('#answers', {
+      $.scrollTo('body', {
         duration: 1000,
         easing: 'swing',
+        offset: -60,
         onAfter: function() {
           jSingleQuestion.find('.questionContent').html(object).slideDown(1000);
         }
