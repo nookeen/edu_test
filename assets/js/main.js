@@ -49,7 +49,6 @@
           include.lib('hashids', min),
           include.lib('lodash', min),
           include.lib('localscroll'),
-          include.lib('flow'),
           include.lib('handlebars-v4.0.11'),
     // Data for DB import
           include.main('content') )

@@ -422,6 +422,11 @@ blockquote {border: none;}
     padding-left: 15px;
     padding-right: 15px;
   }
+  
+  .preloader img {
+    left: 42%;
+    top: 38%;
+  }
 }
 
 /* Small Devices, Tablets */
