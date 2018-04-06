@@ -1,4 +1,18 @@
+/* ========================================================
+* A. Pasternak's Astronomy Course DEMO (Swiiiiish)
+*
+* This script gets a json object and builds
+* a course with questions and explanations with it
+*
+* Hi-ho Hi-ho off to astronomy we go
+======================================================== */
+
 (function() {
+
+  //============================================================================
+  // Let's create a decent include fn to work with load.js
+  //============================================================================
+  
   var path = 'assets/js/';
   var min = false;
   
@@ -22,16 +36,20 @@
     
     return path + directory + name + min + '.js';
   }
-
+  
   min = true;
-
-  // Load Libraries
+  
+  //============================================================================
+  // Load Libraries and scripts
+  //============================================================================
+  
   load(include.lib('jquery-3.1.1', min))
     .then(include.lib('dexie'),
           include.lib('bootstrap', min),
           include.lib('hashids', min),
           include.lib('lodash', min),
           include.lib('localscroll'),
+          include.lib('flow'),
           include.lib('handlebars-v4.0.11'),
     // Data for DB import
           include.main('content') )
@@ -40,7 +58,7 @@
     .then(include.module('config_module'))
     .then(include.module('utilities_module'))
     .then(include.module('debug_module'))
-    .then(include.module('rendering_module.v4'))
+    .then(include.module('rendering_module.v5'))
     .then(include.module('routes_module'))
     .then(include.module('db_module.v2'))
     .then(include.module('users_module'))

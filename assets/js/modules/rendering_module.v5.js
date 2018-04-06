@@ -70,7 +70,6 @@ var RENDERING_MODULE = (function() {
         //  console.p('context=');
         //    console.p(context);
         
-        _Template(context, nextPageID, nextPageClass);
       },
       
       '#questions': function() {
@@ -91,8 +90,6 @@ var RENDERING_MODULE = (function() {
           console.p('index=' + index);
             console.p('context=');
               console.p(context);
-        
-        _Template(context, nextPageID, nextPageClass);
       },
       
       '#single-question': function() {
@@ -114,6 +111,8 @@ var RENDERING_MODULE = (function() {
         //      console.p(index);
         //       console.p('config.tests.questions=');
         //         console.p(config.tests.questions);
+                    console.p(jSingleQuestion);
+        
         
         // Add title thru jQuery
         jSingleQuestion.find('h2.questionTitle').text(context.currentQuestion.questionTitle);
@@ -123,147 +122,180 @@ var RENDERING_MODULE = (function() {
         //    console.p(index);
         //      console.p('context=');
         //        console.p(context);
-                //return
+        //return
         
-        setTimeout(function() {
-          _Template(context, nextPageID, nextPageClass);
+        //setTimeout(function() {
+          //_Template(context, nextPageID, nextPageClass);
           
-          _renderSingleQuestionPage(jSingleQuestion, context);
-        }, 700);
+          
+          _renderSingleQuestionPage(jSingleQuestion, context, nextPageClass);
+        //}, 100);
         
       }
     };
     
+    
+    //============================================================================
     // Execute the needed function depending on the url keyword (stored in nextPage).
+    //============================================================================
+    
     if(map[nextPageID]){
       
       map[nextPageID]();
       
-      _switchPageTo(nextPageClass);
+      if(nextPageClass !== '#single-question')
+        _switchPageTo(nextPageClass, nextPageID, context);
       
       // Save into session and config
       sessionStorage.setItem('currentPage', nextPageName);
       config.appSession.currentPage = nextPageName;
       
     } else {
+      
       // If the keyword isn't listed in the above - show error alert.
-      inc.UTIL.showAlertBox(inc.TXT.txt.page_does_not_exist, 'danger'); // Need to login
+      inc.UTIL.showAlertBox(inc.TXT.txt.page_does_not_exist, 'danger');
       
       // Add errors for more segments 000000000
       // (...)
       
       console.error('Error: ' + url);
-      
-      return;
     }
   }
   
-  function _switchPageTo(nextPageClass) {
+  //============================================================================
+  // _switchPageTo
+  //============================================================================
+  
+  function _switchPageTo(nextPageClass, nextPageID, context) {
+    
+    // Hide Previous page
+    // Template fills the div
+    // Show new page
+    flow.define(_hidePreviousPage(nextPageClass),
+                _Template(context, nextPageID, nextPageClass),
+                _showNewPage(nextPageClass)
+    );
+  }
+  
+  //============================================================================
+  // _hidePreviousPage
+  //============================================================================
+  
+  function _hidePreviousPage(nextPageClass) {
     
     var previousPage = {
       name: '',
       className: ''
-    },
-    
-    // New page which we gonna show
-    jNewPage = config.pages.jPages.siblings(nextPageClass);
+    };
     
     previousPage.name = config.appSession.currentPage;
     
-    //console.p('@previousPage=');
-      //console.p(previousPage);
+    //console.p('@previousPage.className="' + previousPage.className + '", exists = ' + exists);
+      //console.p('@previousPage=');
+        //console.p(previousPage);
     
-    if(__doesPreviousPageExist(previousPage) === false){ // single pages need pause
-      
-      //console.p('nextPageClass=' + nextPageClass);
-      
-      __showNewPage(); // Show new page
-      
-      return;
-    }
+    if (previousPage.className === null || previousPage.className === nextPageClass)
+      return true;
     
-    __hidePreviousPage(previousPage);
+    console.p('@Let\'s hide this: ' + previousPage.name);
+    
+    previousPage.className = '.' + previousPage.name;
+    
+    // Get the jQuery object of the page
+    previousPage.jObj = config.pages.jPages.siblings(previousPage.className);
+    
+    // Update aria-hidden => true on previousPage
+    // (...)
+    
+    // 1. => bring the opacity down,
+    // 2. => move from right to left,
+    // 3. => move previous page to middle of nowhere
+    
+    previousPage.jObj.removeClass('visible').addClass('offset-page');
     
     // CSS is set to 500ms, so before showing nextPageClass,
     // we want to wait until animation is done
     setTimeout(function() {
       
+      console.p('@setTimeout done, the previous page must be hidden completely.');
+      
       // 4. => Remove offset so it would not cause slide conflict
       previousPage.jObj.addClass('offscreen').removeClass('offset-page');
       
-      __showNewPage();
+      return true; // The page is now gone
     
-    }, 500);
-    
-    
-    function __hidePreviousPage(previousPage) {
-      
-      //console.p('@Let\'s hide this: ' + previousPage.name);
-      
-      previousPage.className = '.' + previousPage.name;
-      
-      // Get the jQuery object of the page
-      previousPage.jObj = config.pages.jPages.siblings(previousPage.className);
-      
-      // 1. => bring the opacity down,
-      // 2. => move from right to left,
-      // 3. => move previous page to middle of nowhere
-      
-      previousPage.jObj.removeClass('visible').addClass('offset-page');
-      
-      // Update aria-hidden => true on previousPage
-      // (...)
-    }
-    
-    function __showNewPage() {
-      
-      //console.p('@Animating view for new page...');
-      
-      // Update aria-hidden => false on next page
-      // (...)
-      
-      // 1. => move it back from the middle of nowhere
-      // 2. => bring opacity up
-      // 3. => move from right to left
-      jNewPage.removeClass('offscreen hidden').addClass('visible'); // CSS 'transition' will do the rest
-    }
-    
-    
-    function __doesPreviousPageExist(previousPage) {
-      
-      var exists = false;
-      
-      (previousPage.name === null || previousPage.className === nextPageClass) ? exists : exists = true;
-      
-      //console.p('@previousPage.className="' + previousPage.className + '", exists = ' + exists);
-      
-      return exists;
-    }
+    }, 2000);
   }
   
-  function _Template(context, nextPageID, nextPageClass) {
+  //============================================================================
+  // _Template
+  //============================================================================
   
+  function _Template(context, nextPageID, nextPageClass) {
+    
     //console.p('@Entered _Template. nextPageID=' + nextPageID + ', nextPageClass=' + nextPageClass);
     
+    if (nextPageClass === '.login' && nextPageClass === '.register')
+      return true;
+    
     // Grab the _Template script
-    var theTemplateScript = $(nextPageID + "-list").html();
+    var theTemplateScript = config.jBody.find(nextPageID + "-list").html();
     
     // Compile the _Template
     var theTemplate = Handlebars.compile(theTemplateScript);
     var theCompiledHtml = theTemplate(context);
     
     // Add the compiled html to the page
-    $(nextPageClass+'-content').html(theCompiledHtml);
+    config.jBody.find(nextPageClass + '-content').html(theCompiledHtml);
+    
+    console.p('@_Template. built, moving on.');
+    
+    return true;
+  }
+  
+  //============================================================================
+  // _showNewPage
+  //============================================================================
+  
+  function _showNewPage(nextPageClass) {
+    
+    console.p('@_showNewPage.');
+    
+    // New page which we gonna show
+    var jNewPage = config.pages.jPages.siblings(nextPageClass);
+    
+    //console.p('@Animating view for new page...');
+    
+    // Update aria-hidden => false on next page
+    // (...)
+    
+    // 1. => move it back from the middle of nowhere
+    // 2. => bring opacity up
+    // 3. => move from right to left
+    
+    jNewPage.removeClass('offscreen hidden').addClass('visible'); // CSS 'transition' will do the rest
+    
+    console.p('@_showNewPage all functions fired.');
   }
   
   
+  
+  
+  
+  
+  
+  // ---
+  // ---
   // ---
   // Everything below needs modulation !!!
   // ---
-  function _renderSingleQuestionPage(jPageObj, context){
+  // ---
+  // ---
+  function _renderSingleQuestionPage(jPageObj, context, nextPageClass){
     
-    //console.p(jPageObj);
-    //console.p(context.singleQuestion);
+    console.p(jPageObj);
+    console.p(nextPageClass);
+    console.p(context);
     
     var qID = context.singleQuestion[0].questionUniqueID;
     var tID = context.singleQuestion[0].testUniqueID;
@@ -276,11 +308,11 @@ var RENDERING_MODULE = (function() {
       //console.log(localStorage);
     
     var f = _.find(config.tests.tests, { 'testUniqueID': tID });
-    var n = _.findKey(f.questions, { 'questionUniqueID': qID, });
+    var n = _.findKey(f.questions, { 'questionUniqueID': qID });
     n = parseInt(n);
     
     var x = n+1;
-    var thisone = f.questions[n];
+    //var thisone = f.questions[n];
     var next = f.questions[x];
     var previous = f.questions[n-1];
     
@@ -319,10 +351,11 @@ var RENDERING_MODULE = (function() {
     //console.log(tID);
     //console.log(sessionStorage);
     //console.log(localStorage);
+    //console.log(jPageObj);
     
     if(aID !== null){
       
-      //console.log("SOLVED!");
+      console.p("SOLVED!");
       
       answerSolved(aID);
       
@@ -335,6 +368,8 @@ var RENDERING_MODULE = (function() {
     // Add toggle event to this set
     jPageObj.find('.list li a').on('click', function(){
       
+      console.p('@Onclick event added to "list li a"');
+      
       var jThis = $(this);
       
       jPageObj.find('.list li').removeClass('selected');
@@ -344,12 +379,16 @@ var RENDERING_MODULE = (function() {
     //
     // Then on submit check if the answer is correct
     jPageObj.find('.btn.confirm').on('click', function() {
-    
+      
+      console.p('@Onclick event added to ".btn.confirm"');
+      
       _onQuestionSubmit();
     });
     //
     //
     // ------
+    
+    console.p('passed');
     
     
     // Hide questionContent
@@ -396,6 +435,13 @@ var RENDERING_MODULE = (function() {
       var jObj = jPageObj.find('.answerHint');
       
       (hide === false) ? jObj.slideUp(100) : jObj.html(context.currentQuestion.answerHint).slideUp(1).slideDown(500);
+      
+      if(hide !== false){
+        $.scrollTo('#hint', {
+          duration: 1000,
+          easing: 'swing'
+        });
+      }
     }
     
     function answerSolved(auID) {
@@ -406,13 +452,13 @@ var RENDERING_MODULE = (function() {
       //console.log(object);
       //console.log('auID = ' + auID);
       
-      $.scrollTo('#answers',{
-      duration: 1000,
-      easing: 'swing',
-      onAfter: function() {
-      jPageObj.find('.questionContent').html(object).slideDown(1000);
-    }
-  });
+      $.scrollTo('#answers', {
+        duration: 1000,
+        easing: 'swing',
+        onAfter: function() {
+          jPageObj.find('.questionContent').html(object).slideDown(1000);
+        }
+      });
       
       
       
